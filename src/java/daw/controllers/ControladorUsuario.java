@@ -69,45 +69,46 @@ public class ControladorUsuario extends HttpServlet {
         String vista;
         String accion = request.getPathInfo();
         if (accion.equals("/guardar")) {
+
+            //los campos "name" del formUsuarios:
             String nombre = request.getParameter("nombre");
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
-            String descripcion = request.getParameter("descripcion");
+            String biografia = request.getParameter("biografia");
             String marca = request.getParameter("marca");
             String modelo = request.getParameter("modelo");
 
             try {
-                if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || descripcion.isEmpty()) {
-                    throw new NullPointerException();
-                }
+                if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || marca.isEmpty() || modelo.isEmpty()) {
+                    //request.setAttribute("vacio", "campos vacios!!!");
+                } else {
+                    TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                    q.setParameter("correo", correo);
+                    List<Usuarios> lu = q.getResultList();
 
-                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
-                q.setParameter("correo", correo);
-                List<Usuarios> lu = q.getResultList();
+                    if (!lu.isEmpty()) {
+                        request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                        vista = "formUsuarios";
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                        rd.forward(request, response);
+                    } else {
+                        Moto moto = new Moto(marca, modelo);
 
-                if (!lu.isEmpty()) {
-                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                    vista = "formUsuarios";
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-                    rd.forward(request, response);
-                } 
-                else {
-                    Moto m = new Moto(marca, modelo); 
-                    
-                    LocalDateTime fechaRegistro = LocalDateTime.now();
-                    
-                    Usuarios u = new Usuarios(nombre, descripcion,  correo, contrasena, fechaRegistro, m);
-                    guardarUsuario(u);
-                    response.sendRedirect("/miapp/usuarios");
+                        LocalDateTime fechaRegistro = LocalDateTime.now();
+
+                        Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto);
+                        guardarUsuario(u);
+                        response.sendRedirect("/miapp/usuarios");
+                    }
                 }
 
             } catch (Exception e) {
                 request.setAttribute("msg", "Error: datos no válidos");
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/error.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                 rd.forward(request, response);
             }
         } else {
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/error.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
             rd.forward(request, response);
         }
     }
@@ -131,6 +132,30 @@ public class ControladorUsuario extends HttpServlet {
             utx.commit();
         } catch (Exception e) {
             Log.log(Level.SEVERE, "excepción capturada", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Este es el método correcto para eliminar
+    public void eliminarUsuario(Long id) {
+        try {
+            utx.begin();
+
+            // 1. Buscamos el usuario en la BBDD por su ID para que esté "gestionado" (managed)
+            Usuarios u = em.find(Usuarios.class, id);
+
+            // 2. Si existe, lo eliminamos
+            if (u != null) {
+                em.remove(u); // La operación de borrado de JPA
+                Log.log(Level.INFO, "Usuario {0} eliminado", id);
+            } else {
+                Log.log(Level.WARNING, "Intento de eliminar ID {0} que no existe.", id);
+            }
+
+            utx.commit();
+        } catch (Exception e) {
+            Log.log(Level.SEVERE, "Excepción capturada al eliminar", e);
+            // (En un entorno real, querrías hacer rollback aquí si utx.commit() falla)
             throw new RuntimeException(e);
         }
     }

@@ -2,18 +2,17 @@
 
 <%@include file="plantillas/header_plantilla.jspf" %>
 
-<h6 class="display-6">Usuarios</h6>
+<h3 class="texto mt-5 mb-3">Usuarios</h3>
 
 <c:if test="${!empty requestScope.usuarios}">
 
     <div> 
-        <table class="table">
+        <table class="table table-dark m-5">
             <thead>
                 <tr>
-                    <th>ID</th> 
                     <th>Nombre</th>
                     <th>Correo</th>
-                    <th>Descripcion</th>
+                    <th>Biografia</th>
                     <th>Marca</th>
                     <th>Modelo</th>
 
@@ -22,11 +21,11 @@
             <tbody>
                 <c:forEach var="usuario" items="${requestScope.usuarios}" >
                     <tr>
-                        <td>${usuario.id}</td>
                         <td>${usuario.nombre}</td>
                         <td>${usuario.correo}</td>
-                        <td>${usuario.descripcion}</td>
-                        
+                        <td>${usuario.biografia}</td>
+                        <td>${usuario.moto.marca}</td>                        
+                        <td>${usuario.moto.modelo}</td>                        
                     </tr>
                 </c:forEach>
             </tbody>

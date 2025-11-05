@@ -1,14 +1,15 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@include file="plantillas/header_plantilla.jspf" %>
-<link href="/miapp/css/iniciarsesion.css" rel="stylesheet" type="text/css"/>
+<link href="/miapp/css/centrarformularios.css" rel="stylesheet" type="text/css"/>
 
 <div class="container justify-content-center">
-    <main class="form-signin w-100 m-auto">
-        <form>
+    <main class="iniciodesesion w-100 m-auto">
+        <form action="/miapp/inicio" class="mt-5">
             <img class="mb-4" src="/miapp/imagenes/logo.png" alt="" width="90" height=90">
 
-            <h3 class="h3 mb-3 fw-normal">Inicia sesión con tu cuenta del Tumbometro</h3>
+            <h3 class="h3 mb-3 fw-normal">Inicia sesión con tu cuenta</h3>
 
-            <div class="form-floating">
+            <div class="form-floating mb-3 ">
                 <input 
                     type="email" 
                     class="form-control" 
@@ -16,8 +17,14 @@
                     placeholder="name@example.com">
                 <label for="floatingInput">Correo</label>
             </div>
+            
+            <c:if test="${!empty requestScope.vacio}">
+                <div class="alert alert-danger" role="alert">
+                    ${requestScope.vacio}
+                </div>
+            </c:if>
 
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <input 
                     type="password" 
                     class="form-control" 
@@ -37,9 +44,7 @@
                 </label>
             </div>
 
-            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-
-            <p class="mt-5 mb-3 text-body-secondary">© 2025</p>
+            <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
         </form>
     </main>
 </div>

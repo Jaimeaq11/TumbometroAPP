@@ -18,7 +18,6 @@ import java.util.List;
 @NamedQueries({
  @NamedQuery(name="Usuarios.findAll", query="SELECT u FROM Usuarios u"),
  @NamedQuery(name="Usuarios.findByName", query="SELECT u FROM Usuarios u WHERE u.nombre = :nombre"),
- 
  @NamedQuery(name="Usuarios.findByEmail", query="SELECT u FROM Usuarios u WHERE u.correo = :correo")
 })
 
@@ -33,8 +32,8 @@ public class Usuarios implements Serializable {
     private Long id;
     private String nombre;
     private String correo;
+    private String biografia;
     private String contrasena;
-    private String descripcion;
     private LocalDateTime fechaRegistro;
     private Moto moto;
     //private List<Ruta> rutas = new ArrayList<>();
@@ -42,19 +41,19 @@ public class Usuarios implements Serializable {
     public Usuarios() {
     }
 
-    public Usuarios(String nombre, String correo, String descripcion, String contrasena, LocalDateTime fechaRegistro, Moto moto) {
+    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, Moto moto) {
         this.nombre = nombre;
         this.correo = correo;
-        this.descripcion = descripcion;
+        this.biografia = biografia;
         this.contrasena =  contrasena;
         this.moto = moto;
         this.fechaRegistro = fechaRegistro;
     }
 
-    /*public Usuarios(String nombre, String correo, String descripcion, String contraseña) {
+    /*public Usuarios(String nombre, String correo, String biografia, String contraseña) {
         this.nombre = nombre;
         this.correo = correo;
-        this.descripcion = descripcion;
+        this.biografia = biografia;
         this.contrasena = contraseña;
     }*/
 
@@ -123,12 +122,12 @@ public class Usuarios implements Serializable {
         this.rutas = rutas;
     }*/
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getBiografia() {
+        return biografia;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setBiografia(String biografia) {
+        this.biografia = biografia;
     }
 
     public Moto getMoto() {

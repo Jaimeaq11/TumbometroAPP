@@ -65,4 +65,10 @@ public class Moto implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
+
+    @Override
+    public String toString() {
+        return "Moto{" + "marca=" + marca + ", modelo=" + modelo + ", potencia=" + potencia + ", cilindrada=" + cilindrada + ", color=" + color + '}';
+    }
+    
 }
