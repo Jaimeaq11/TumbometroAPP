@@ -1,13 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <%@include file="plantillas/header_plantilla.jspf" %>
-
-<h3 class="texto mt-5 mb-3">Usuarios</h3>
 
 <c:if test="${!empty requestScope.usuarios}">
 
+    <h3 class="texto mt-5 mb-3">Usuarios registrados</h3>
     <div> 
-        <table class="table table-dark m-5">
+        <table class="table table-dark">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -34,7 +32,7 @@
     </c:if>
 
     <c:if test="${empty requestScope.usuarios}">
-        <p>Oops! No hay Usuarios todavía!</p>
+        <h3 class="texto">Oops! No hay Usuarios todavía!</h3>
     </c:if>
 </div>
 

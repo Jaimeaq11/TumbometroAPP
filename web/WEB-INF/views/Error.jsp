@@ -21,7 +21,7 @@
             </c:if>
         </div>
 
-        <a href="/miapp/usuario/nuevo" class="btn btn-primary mt-3">Volver al formulario</a>
+        <a href="/miapp/inicio" class="btn btn-primary mt-3">Volver</a>
         
     </div>
 </div>

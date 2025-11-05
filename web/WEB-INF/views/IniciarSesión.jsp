@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@include file="plantillas/header_plantilla.jspf" %>
-<link href="/miapp/css/centrarformularios.css" rel="stylesheet" type="text/css"/>
 
 <div class="container justify-content-center">
     <main class="iniciodesesion w-100 m-auto">

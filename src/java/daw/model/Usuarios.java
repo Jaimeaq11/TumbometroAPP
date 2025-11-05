@@ -2,11 +2,13 @@ package daw.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,18 +38,21 @@ public class Usuarios implements Serializable {
     private String contrasena;
     private LocalDateTime fechaRegistro;
     private Moto moto;
-    //private List<Ruta> rutas = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private ArrayList<Ruta> rutas = new ArrayList<>();
 
     public Usuarios() {
     }
 
-    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, Moto moto) {
+    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, Moto moto, ArrayList<Ruta> rutas) {
         this.nombre = nombre;
         this.correo = correo;
         this.biografia = biografia;
         this.contrasena =  contrasena;
         this.moto = moto;
         this.fechaRegistro = fechaRegistro;
+        this.rutas = rutas; 
     }
 
     /*public Usuarios(String nombre, String correo, String biografia, String contraseña) {
@@ -88,6 +93,14 @@ public class Usuarios implements Serializable {
     @Override
     public String toString() {
         return "daw.model.Usuarios[ id=" + id + " ]";
+    }
+
+    public ArrayList<Ruta> getRutas() {
+        return rutas;
+    }
+
+    public void setRutas(ArrayList<Ruta> rutas) {
+        this.rutas = rutas;
     }
 
     public String getNombre() {

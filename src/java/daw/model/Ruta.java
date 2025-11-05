@@ -1,9 +1,12 @@
 package daw.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,6 +26,9 @@ public class Ruta implements Serializable {
     private Date fecha;                 
     private double velocidadMaxima;          
     private double velocidadMedia;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Usuarios usuario;
     
     public Ruta() {
     }

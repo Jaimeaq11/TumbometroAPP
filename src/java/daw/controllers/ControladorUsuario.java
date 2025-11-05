@@ -55,6 +55,9 @@ public class ControladorUsuario extends HttpServlet {
             case "/iniciarsesion" -> {
                 vista = "IniciarSesión";
             }
+            case "/rutas" -> {
+                vista = "Rutas";
+            }
             default -> {
                 vista = "Error";
             }
@@ -136,15 +139,12 @@ public class ControladorUsuario extends HttpServlet {
         }
     }
 
-    // Este es el método correcto para eliminar
     public void eliminarUsuario(Long id) {
         try {
             utx.begin();
 
-            // 1. Buscamos el usuario en la BBDD por su ID para que esté "gestionado" (managed)
             Usuarios u = em.find(Usuarios.class, id);
 
-            // 2. Si existe, lo eliminamos
             if (u != null) {
                 em.remove(u); // La operación de borrado de JPA
                 Log.log(Level.INFO, "Usuario {0} eliminado", id);
@@ -155,7 +155,6 @@ public class ControladorUsuario extends HttpServlet {
             utx.commit();
         } catch (Exception e) {
             Log.log(Level.SEVERE, "Excepción capturada al eliminar", e);
-            // (En un entorno real, querrías hacer rollback aquí si utx.commit() falla)
             throw new RuntimeException(e);
         }
     }
