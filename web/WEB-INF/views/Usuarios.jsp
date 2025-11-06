@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@include file="plantillas/header_plantilla.jspf" %>
 
-<c:if test="${!empty requestScope.usuarios}">
+<c:if test="${!empty requestScope.listausuarios}">
 
     <h3 class="texto mt-5 mb-3">Usuarios registrados</h3>
     <div> 
@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="usuario" items="${requestScope.usuarios}" >
+                <c:forEach var="usuario" items="${requestScope.listausuarios}" >
                     <tr>
                         <td>${usuario.nombre}</td>
                         <td>${usuario.correo}</td>
@@ -31,7 +31,7 @@
 
     </c:if>
 
-    <c:if test="${empty requestScope.usuarios}">
+    <c:if test="${empty requestScope.listausuarios}">
         <h3 class="texto">Oops! No hay Usuarios todavía!</h3>
     </c:if>
 </div>

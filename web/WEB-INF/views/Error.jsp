@@ -5,8 +5,8 @@
 <div class="row">
     <div class="col-md-8 offset-md-2 text-center">
         
-        <h1 class="display-4 text-danger">Bro... Ha petao</h1>
-        <p class="lead">Ha ocurrido un problema al procesar tu solicitud.</p>
+        <h1 class="display-4 text-danger">El proyecto implosionó</h1>
+        <p class="lead">Pisha... estás jodido.</p>
 
         <div class="alert alert-danger mt-4" role="alert">
             <strong>La causa de la explosión:</strong>
@@ -17,7 +17,7 @@
             </c:if>
             
             <c:if test="${empty requestScope.msg}">
-                No se proporcionaron detalles del error.
+                illo que no hay detalles (sabe o no).
             </c:if>
         </div>
 

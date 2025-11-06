@@ -3,7 +3,7 @@
 
 <div class="container justify-content-center">
     <main class="formulariousuarios w-100 m-auto">
-        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/guardar" method="POST">
+        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/registrar" method="POST">
 
             <h3 class="mt-5 mb-3">Registrar usuario</h3>
 

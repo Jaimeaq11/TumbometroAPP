@@ -2,6 +2,7 @@ package daw.controllers;
 
 import daw.model.Usuarios;
 import daw.model.Moto;
+import daw.model.Ruta;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.UserTransaction;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -34,8 +36,8 @@ public class ControladorUsuario extends HttpServlet {
 
         String vista;
         String accion = "/usuarios";
-        if (request.getServletPath().equals("/usuario")) {
-            if (request.getPathInfo() != null) {
+        if (request.getServletPath().equals("/usuario")) { //comprueba si es /miapp/usuario/*
+            if (request.getPathInfo() != null) { //el *
                 accion = request.getPathInfo();
             } else {
                 accion = "error";
@@ -46,17 +48,32 @@ public class ControladorUsuario extends HttpServlet {
                 List<Usuarios> lu;
                 TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findAll", Usuarios.class);
                 lu = q.getResultList();
-                request.setAttribute("usuarios", lu);
+                request.setAttribute("listausuarios", lu);
                 vista = "Usuarios";
             }
             case "/nuevo" -> {
                 vista = "FormUsuarios";
             }
-            case "/iniciarsesion" -> {
-                vista = "IniciarSesión";
+            case "/iniciar-sesion" -> {
+                vista = "IniciarSesion";
             }
-            case "/rutas" -> {
-                vista = "Rutas";
+            case "/mis-rutas" -> {
+                vista = "Error"; //asumimos con algun valor para que no de error
+                try {
+                    Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
+
+                    if (usuarioLogueado == null) {
+                        response.sendRedirect(request.getContextPath() + "/usuario/iniciar-sesion");
+                    } else {
+                        Usuarios usuario = em.find(Usuarios.class, usuarioLogueado.getId());
+                        List<Ruta> misRutas = usuario.getRutas();
+                        request.setAttribute("misRutas", misRutas);
+                        vista = "MisRutas";
+                    }
+
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error al cargar tus rutas.");
+                }
             }
             default -> {
                 vista = "Error";
@@ -71,7 +88,7 @@ public class ControladorUsuario extends HttpServlet {
 
         String vista;
         String accion = request.getPathInfo();
-        if (accion.equals("/guardar")) {
+        if (accion.equals("/registrar")) {
 
             //los campos "name" del formUsuarios:
             String nombre = request.getParameter("nombre");
@@ -82,27 +99,53 @@ public class ControladorUsuario extends HttpServlet {
             String modelo = request.getParameter("modelo");
 
             try {
-                if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || marca.isEmpty() || modelo.isEmpty()) {
-                    //request.setAttribute("vacio", "campos vacios!!!");
+                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                q.setParameter("correo", correo);
+                List<Usuarios> lu = q.getResultList();
+
+                if (!lu.isEmpty()) {
+                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                    vista = "formUsuarios";
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                    rd.forward(request, response);
                 } else {
-                    TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
-                    q.setParameter("correo", correo);
-                    List<Usuarios> lu = q.getResultList();
+                    Moto moto = new Moto(marca, modelo);
+                    LocalDateTime fechaRegistro = LocalDateTime.now();
+                    ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
 
-                    if (!lu.isEmpty()) {
-                        request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                        vista = "formUsuarios";
-                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-                        rd.forward(request, response);
-                    } else {
-                        Moto moto = new Moto(marca, modelo);
+                    Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto, rutas);
+                    guardarUsuario(u);
+                    response.sendRedirect("/miapp/usuarios");
+                }
 
-                        LocalDateTime fechaRegistro = LocalDateTime.now();
+            } catch (Exception e) {
+                request.setAttribute("msg", "Error: datos no válidos");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                rd.forward(request, response);
+            }
+        } else if (accion.equals("/loguear")) {
+            //los campos "name" del formUsuarios:
+            String correo = request.getParameter("correo");
+            String contrasena = request.getParameter("contrasena");
 
-                        Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto);
-                        guardarUsuario(u);
-                        response.sendRedirect("/miapp/usuarios");
-                    }
+            try {
+                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                q.setParameter("correo", correo);
+                List<Usuarios> lu = q.getResultList();
+
+                if (!lu.isEmpty()) {
+                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                    vista = "IniciarSesion";
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                    rd.forward(request, response);
+                } else {
+                    /*Moto moto = new Moto(marca, modelo);
+                    LocalDateTime fechaRegistro = LocalDateTime.now();
+                    ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
+
+                    Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto, rutas);
+                    guardarUsuario(u);*/
+                    response.sendRedirect("/miapp/usuarios");
                 }
 
             } catch (Exception e) {
@@ -127,7 +170,7 @@ public class ControladorUsuario extends HttpServlet {
             utx.begin();
             if (id == null) {
                 em.persist(u);
-                Log.log(Level.INFO, "Nuevo Usuario Guardado");
+                Log.log(Level.INFO, "Nuevo Usuario Registrado");
             } else {
                 Log.log(Level.INFO, "Usuario {0} actualizado", id);
                 em.merge(u);

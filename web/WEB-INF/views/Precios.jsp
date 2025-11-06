@@ -3,7 +3,7 @@
 
 <div class="container py-3">
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-        <h1 class="display-4 fw-normal text-body-emphasis">Pricing</h1>
+        <h1 class="display-4 fw-normal text-body-emphasis">Planes</h1>
         <p class="fs-5 text-body-secondary">
             Quickly build an effective pricing table for your potential customers with this Bootstrap example.
             It?s built with default Bootstrap components and utilities with little customization.

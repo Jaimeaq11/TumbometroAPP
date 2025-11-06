@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class ControladorPrincipal extends HttpServlet {
 
     @PersistenceContext(unitName = "ElTumbometroPU")
-    private EntityManager em;
+    //private EntityManager em;
     //@Resource
     //private static final Logger Log = Logger.getLogger(ControladorUsuario.class.getName());
     
