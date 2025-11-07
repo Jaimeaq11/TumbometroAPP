@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@include file="plantillas/header_plantilla.jspf" %>
+<%@include file="plantillas/header.jspf" %>
 
 <div class="row">
     <div class="col-8">
@@ -49,4 +49,4 @@
     </div>
 </c:if>
 
-<%@include file="plantillas/footer_plantilla.jspf" %>
+<%@include file="plantillas/footer.jspf" %>

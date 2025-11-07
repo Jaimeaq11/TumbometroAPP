@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@include file="plantillas/header_plantilla.jspf" %>
+<%@include file="plantillas/header.jspf" %>
 
 <div class="container justify-content-center">
     <main class="formulariousuarios w-100 m-auto">
@@ -65,4 +65,4 @@
     </main>
 </div>
 
-<%@include file="plantillas/footer_plantilla.jspf" %>  
+<%@include file="plantillas/footer.jspf" %>  

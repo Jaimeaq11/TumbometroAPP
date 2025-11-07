@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@include file="plantillas/header_plantilla.jspf" %>
+<%@include file="plantillas/header.jspf" %>
 
 <c:if test="${!empty requestScope.listausuarios}">
 
@@ -36,4 +36,4 @@
     </c:if>
 </div>
 
-<%@include file="plantillas/footer_plantilla.jspf" %>
+<%@include file="plantillas/footer.jspf" %>
