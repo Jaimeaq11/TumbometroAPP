@@ -5,7 +5,7 @@
 
     <h3 class="texto mt-5 mb-3">Usuarios registrados</h3>
     <div> 
-        <table class="table table-dark">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -16,7 +16,7 @@
 
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
                 <c:forEach var="usuario" items="${requestScope.listausuarios}" >
                     <tr>
                         <td>${usuario.nombre}</td>

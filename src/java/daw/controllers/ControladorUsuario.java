@@ -99,23 +99,31 @@ public class ControladorUsuario extends HttpServlet {
             String modelo = request.getParameter("modelo");
 
             try {
-                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
-                q.setParameter("correo", correo);
-                List<Usuarios> lu = q.getResultList();
-
-                if (!lu.isEmpty()) {
-                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                    vista = "formUsuarios";
+                if (marca == null || marca.isEmpty() || modelo.isEmpty() || modelo == null) {
+                    request.setAttribute("faltaVehiculo", "Debes registrar un vehículo");
+                    vista = "FormUsuarios";
                     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
                     rd.forward(request, response);
                 } else {
-                    Moto moto = new Moto(marca, modelo);
-                    LocalDateTime fechaRegistro = LocalDateTime.now();
-                    ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
 
-                    Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto, rutas);
-                    guardarUsuario(u);
-                    response.sendRedirect("/miapp/usuarios");
+                    TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                    q.setParameter("correo", correo);
+                    List<Usuarios> lu = q.getResultList();
+
+                    if (!lu.isEmpty()) {
+                        request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                        vista = "FormUsuarios";
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                        rd.forward(request, response);
+                    } else {
+                        Moto moto = new Moto(marca, modelo);
+                        LocalDateTime fechaRegistro = LocalDateTime.now();
+                        ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
+
+                        Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto, rutas);
+                        guardarUsuario(u);
+                        response.sendRedirect("/miapp/usuarios");
+                    }
                 }
 
             } catch (Exception e) {
@@ -133,19 +141,17 @@ public class ControladorUsuario extends HttpServlet {
                 q.setParameter("correo", correo);
                 List<Usuarios> lu = q.getResultList();
 
-                if (!lu.isEmpty()) {
-                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                //comprobar si no esta vacio y si la contraseña y el correo coinciden
+                if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contrasena) && lu.get(0).getCorreo().equals(correo)) {
+
+                    Usuarios usuarioLogueado = lu.get(0);
+                    request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
+                    response.sendRedirect("/miapp/usuarios");
+                } else {
+                    request.setAttribute("loginIncorrecto", "Correo o contraseña incorrectos.");
                     vista = "IniciarSesion";
                     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
                     rd.forward(request, response);
-                } else {
-                    /*Moto moto = new Moto(marca, modelo);
-                    LocalDateTime fechaRegistro = LocalDateTime.now();
-                    ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
-
-                    Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto, rutas);
-                    guardarUsuario(u);*/
-                    response.sendRedirect("/miapp/usuarios");
                 }
 
             } catch (Exception e) {

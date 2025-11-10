@@ -4,7 +4,8 @@
 <div class="container justify-content-center">
     <main class="formulariousuarios w-100 m-auto">
         <form id="formulario" class="formulariousuarios" action="/miapp/usuario/registrar" method="POST">
-
+            <img class="" src="/miapp/imagenes/logo.png" alt="" width="90" height="90">
+            
             <h3 class="mt-5 mb-3">Registrar usuario</h3>
 
             <div class="form-floating mb-3">
@@ -24,8 +25,8 @@
             </c:if>
 
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="campobiografia" placeholder="" name="biografia">
-                <label for="campodescripcion">Biografía</label>
+                <input type="text" class="form-control" id="campobiografia" placeholder="" name="biografia" required>
+                <label for="campobiografia">Biografía</label>
             </div>
 
             <div class="form-floating mb-3">
@@ -36,8 +37,14 @@
 
             <h3 class="mt-5 mb-3">Registrar vehículo</h3>
 
+            <c:if test="${!empty requestScope.faltaVehiculo}">
+                <div class="alert alert-danger" role="alert">
+                    ${requestScope.faltaVehiculo}
+                </div>
+            </c:if>
+
             <select class="form-select mb-3" aria-label="" id="selectorMarca" name="marca">
-                <option selected disabled>Marca de moto</option>
+                <option value="" selected disabled>Marca de moto</option>
                 <option value="Yamaha">Yamaha</option>
                 <option value="Honda">Honda</option>
                 <option value="Kawasaki">Kawasaki</option>
@@ -56,11 +63,11 @@
                 <option value="MV Agusta">MV Agusta</option>
             </select>
 
-            <select class="form-select mb-3" aria-label="" id="selectorModelo" name="modelo" disabled>
-                <option selected disabled>Elige un modelo</option>
+            <select class="form-select mb-5" aria-label="" id="selectorModelo" name="modelo" disabled>
+                <option value="" selected disabled>Elige un modelo</option>
             </select>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary w-100 py-2 mb-5">Registrarse</button>
         </form>
     </main>
 </div>

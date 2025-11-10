@@ -41,6 +41,8 @@ public class Usuarios implements Serializable {
     
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private ArrayList<Ruta> rutas = new ArrayList<>();
+    
+    //private String rol; //implementar
 
     public Usuarios() {
     }
