@@ -1,0 +1,82 @@
+.carousel {
+    margin-bottom: 4rem;
+    overflow: hidden;
+}
+
+.carousel-control-prev-icon {
+    filter: invert(1);
+}
+
+.carousel-control-next-icon {
+    filter: invert(1);
+}
+
+.botones {
+    filter: invert(1);
+}
+
+.arreglar1 {
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  opacity: 90%;
+}
+
+.arreglar2 {
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 40%;
+  opacity: 90%;
+}
+
+.arreglar3 {
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  opacity: 90%;
+}
+
+.carousel-caption {
+    bottom: 3rem;
+    z-index: 10;
+}
+
+.carousel-item {
+    height: 35rem;
+}
+
+.marketing .col-lg-4 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.marketing .col-lg-4 p {
+    margin-right: .75rem;
+    margin-left: .75rem;
+}
+
+.featurette-divider {
+    margin: 5rem 0;
+}
+
+.featurette-heading {
+    letter-spacing: -.05rem;
+}
+
+@media (min-width: 40em) {
+    .carousel-caption p {
+        margin-bottom: 1.25rem;
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    .featurette-heading {
+        font-size: 50px;
+    }
+}
+
+@media (min-width: 62em) {
+    .featurette-heading {
+        margin-top: 7rem;
+    }
+}

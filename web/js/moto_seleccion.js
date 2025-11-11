@@ -83,7 +83,8 @@ selectMarca.addEventListener('change', function () {
 
         modelos.forEach(modelo => {
             const opcion = document.createElement('option');
-            opcion.value = modelo.toLowerCase().replace(/ /g, '-'); // ej: "africa-twin"
+            //opcion.value = modelo.toLowerCase().replace(/ /g, '-'); // ej: "africa-twin"
+            opcion.value = modelo;
             opcion.textContent = modelo; // ej: "Africa Twin"
             selectorModelo.appendChild(opcion);
         });

@@ -4,30 +4,32 @@
 <c:if test="${!empty requestScope.listausuarios}">
 
     <h3 class="texto mt-5 mb-3">Usuarios registrados</h3>
-    <div> 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Biografia</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                <c:forEach var="usuario" items="${requestScope.listausuarios}" >
+    <div class="row justify-content-center"> 
+        <div class="col-lg-10">
+            <table class="table table-dark">
+                <thead>
                     <tr>
-                        <td>${usuario.nombre}</td>
-                        <td>${usuario.correo}</td>
-                        <td>${usuario.biografia}</td>
-                        <td>${usuario.moto.marca}</td>                        
-                        <td>${usuario.moto.modelo}</td>                        
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Biografia</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="table-group-divider">
+                    <c:forEach var="usuario" items="${requestScope.listausuarios}" >
+                        <tr>
+                            <td>${usuario.nombre}</td>
+                            <td>${usuario.correo}</td>
+                            <td>${usuario.biografia}</td>
+                            <td>${usuario.moto.marca}</td>                        
+                            <td>${usuario.moto.modelo}</td>                        
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>  
 
     </c:if>
 

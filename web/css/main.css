@@ -1,5 +1,15 @@
- body {
+body {
     background-color: #2b3035;
-    margin: 0px;
+    margin: 0;
     color: white;
+}
+
+.nav-link {
+    font-size: 18px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+
+    transform: translateY(-6px);
 }

@@ -5,7 +5,7 @@
     <main class="formulariousuarios w-100 m-auto">
         <form id="formulario" class="formulariousuarios" action="/miapp/usuario/registrar" method="POST">
             <img class="" src="/miapp/imagenes/logo.png" alt="" width="90" height="90">
-            
+
             <h3 class="mt-5 mb-3">Registrar usuario</h3>
 
             <div class="form-floating mb-3">
@@ -25,9 +25,14 @@
             </c:if>
 
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="campobiografia" placeholder="" name="biografia" required>
+                <textarea class="form-control" id="campobiografia" placeholder="" name="biografia" required style="height: 120px; resize: none;" maxlength="100"></textarea>
                 <label for="campobiografia">Biografía</label>
+                
+                <div class="position-absolute bottom-0 end-0 p-2 text-muted small" id="contador-bio">
+                    0/100
+                </div>
             </div>
+
 
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" id="campocontrasena" placeholder="" name="contrasena" required>
