@@ -3,11 +3,10 @@
 
 <div class="container justify-content-center">
     <main class="formulariousuarios w-100 m-auto">
-        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/registrar" method="POST" enctype="multipart/form-data">
+        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/guardar" method="POST" enctype="multipart/form-data">
             <img class="" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
             <!-- usamos el value para referirnos a editar o a registar -->
-
 
             <c:if test="${!empty requestScope.usuarioEditado}">
                 <h3 class="mt-5 mb-3">Editar perfil</h3>

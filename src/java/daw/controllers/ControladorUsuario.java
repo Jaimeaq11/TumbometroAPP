@@ -109,6 +109,9 @@ public class ControladorUsuario extends HttpServlet {
 
         String vista;
         String accion = request.getPathInfo();
+        if (accion.equals("/guardar")) {
+            
+        }
         if (accion.equals("/registrar")) {
 
             //los campos "name" del formUsuarios:
