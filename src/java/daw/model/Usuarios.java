@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Table(name="usuarios")
+@Table(name = "usuarios")
 @NamedQueries({
- @NamedQuery(name="Usuarios.findAll", query="SELECT u FROM Usuarios u"),
- @NamedQuery(name="Usuarios.findByName", query="SELECT u FROM Usuarios u WHERE u.nombre = :nombre"),
- @NamedQuery(name="Usuarios.findByEmail", query="SELECT u FROM Usuarios u WHERE u.correo = :correo")
+    @NamedQuery(name = "Usuarios.findAll", query = "SELECT u FROM Usuarios u"),
+    @NamedQuery(name = "Usuarios.findByName", query = "SELECT u FROM Usuarios u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuarios.findByEmail", query = "SELECT u FROM Usuarios u WHERE u.correo = :correo")
 })
 
 @Entity
@@ -29,40 +29,33 @@ public class Usuarios implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
-    
+
     private Long id;
     private String nombre;
     private String correo;
     private String biografia;
     private String contrasena;
     private LocalDateTime fechaRegistro;
+    private String rutaFoto;
     private Moto moto;
-    
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private ArrayList<Ruta> rutas = new ArrayList<>();
-    
-    //private String rol; //implementar
 
+    //private String rol; //implementar
     public Usuarios() {
     }
 
-    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, Moto moto, ArrayList<Ruta> rutas) {
+    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, String rutaFoto, Moto moto, ArrayList<Ruta> rutas) {
         this.nombre = nombre;
         this.correo = correo;
         this.biografia = biografia;
-        this.contrasena =  contrasena;
+        this.contrasena = contrasena;
         this.moto = moto;
         this.fechaRegistro = fechaRegistro;
-        this.rutas = rutas; 
+        this.rutas = rutas;
+        this.rutaFoto = rutaFoto;
     }
-
-    /*public Usuarios(String nombre, String correo, String biografia, String contraseña) {
-        this.nombre = nombre;
-        this.correo = correo;
-        this.biografia = biografia;
-        this.contrasena = contraseña;
-    }*/
 
     public Long getId() {
         return id;
@@ -101,6 +94,14 @@ public class Usuarios implements Serializable {
         return rutas;
     }
 
+    public String getRutaFoto() {
+        return rutaFoto;
+    }
+
+    public void setRutaFoto(String rutaFoto) {
+        this.rutaFoto = rutaFoto;
+    }
+
     public void setRutas(ArrayList<Ruta> rutas) {
         this.rutas = rutas;
     }
@@ -136,7 +137,6 @@ public class Usuarios implements Serializable {
     public void setRutas(List<Ruta> rutas) {
         this.rutas = rutas;
     }*/
-
     public String getBiografia() {
         return biografia;
     }

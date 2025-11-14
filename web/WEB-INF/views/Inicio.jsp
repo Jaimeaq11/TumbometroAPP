@@ -19,7 +19,7 @@
                     <div class="carousel-caption text-start">
                         <h1 style="color: white;">¿Listo para rodar?</h1>
                         <p class="opacity-100" style="color: #cccccc; font-size: 23px;">Regístrate gratis, añade tu moto y empieza a construir tu historial de rutas hoy mismo.</p>
-                        <p><a class="btn btn-lg btn-primary" href="/miapp/usuario/registrar">Únete ahora</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="/miapp/usuario/nuevo">Únete ahora</a></p>
                     </div>
                 </div>
             </div>

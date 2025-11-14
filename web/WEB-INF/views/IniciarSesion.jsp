@@ -3,8 +3,8 @@
 
 <div class="container justify-content-center">
     <main class="iniciodesesion w-100 m-auto">
-        <form action="/miapp/usuario/loguear" class="mt-5" method="POST">
-            <img class="mb-4" src="/miapp/imagenes/logo.png" alt="" width="90" height=90">
+        <form action="/miapp/usuario/login" class="mt-5" method="POST">
+            <img class="mb-4" src="/miapp/imagenes/logo.png" alt="" width="120" height=120">
 
             <h3 class="h3 mb-3 fw-normal">Inicia sesión con tu cuenta</h3>
 
@@ -32,7 +32,7 @@
 
             <div class="form-check text-start my-3 mb-4">
                 <input class="form-check-input" type="checkbox" value="remember-me" id="checkDefault">
-                <label class="form-check-label" for="checkDefault">Recuérdame</label>
+                <label class="form-check-label" for="checkDefault" name="recuerdame" value="on">Recuérdame</label>
             </div>
 
             <div class="buttons">

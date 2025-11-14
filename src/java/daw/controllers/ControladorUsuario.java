@@ -3,6 +3,7 @@ package daw.controllers;
 import daw.model.Usuarios;
 import daw.model.Moto;
 import daw.model.Ruta;
+import daw.util.Encriptar;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -11,11 +12,14 @@ import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.UserTransaction;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 @WebServlet(name = "ControladorUsuario", urlPatterns = {"/usuarios", "/usuario/*"})
+@MultipartConfig
 public class ControladorUsuario extends HttpServlet {
 
     @PersistenceContext(unitName = "ElTumbometroPU")
@@ -30,6 +35,8 @@ public class ControladorUsuario extends HttpServlet {
     @Resource
     private UserTransaction utx;
     private static final Logger Log = Logger.getLogger(ControladorUsuario.class.getName());
+    
+    private static final String directorio_url = "imagenes" + File.separator + "perfiles";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -52,29 +59,43 @@ public class ControladorUsuario extends HttpServlet {
                 vista = "Usuarios";
             }
             case "/nuevo" -> {
-                vista = "FormUsuarios";
+                vista = "FormUsuario";
             }
+
+            case "/editar" -> {
+                Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
+                request.setAttribute("usuarioEditado", usuarioLogueado);
+                vista = "FormUsuario";
+            }
+            
             case "/iniciar-sesion" -> {
                 vista = "IniciarSesion";
+            }
+            case "/logout" -> {
+                request.getSession().invalidate();
+
+                //borramos la cookie de "recuerdame"
+                /*Cookie cookieRecordarme = new Cookie("token_recuerdame", null);
+                cookieRecordarme.setMaxAge(0);
+                response.addCookie(cookieRecordarme);*/
+                //tenemos que hacerlo asi para que no se quede la ruta .../logout en la url
+                response.sendRedirect("/miapp/inicio");
+                return;
             }
             case "/mis-rutas" -> {
                 vista = "Error"; //asumimos con algun valor para que no de error
                 try {
                     Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
-
-                    if (usuarioLogueado == null) {
-                        response.sendRedirect(request.getContextPath() + "/usuario/iniciar-sesion");
-                    } else {
-                        Usuarios usuario = em.find(Usuarios.class, usuarioLogueado.getId());
-                        List<Ruta> misRutas = usuario.getRutas();
-                        request.setAttribute("misRutas", misRutas);
-                        vista = "MisRutas";
-                    }
+                    Usuarios usuario = em.find(Usuarios.class, usuarioLogueado.getId());
+                    List<Ruta> misRutas = usuario.getRutas();
+                    request.setAttribute("misRutas", misRutas);
+                    vista = "MisRutas";
 
                 } catch (Exception e) {
                     request.setAttribute("msg", "Error al cargar tus rutas.");
                 }
             }
+
             default -> {
                 vista = "Error";
             }
@@ -94,14 +115,16 @@ public class ControladorUsuario extends HttpServlet {
             String nombre = request.getParameter("nombre");
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
+            String contraseñaEncriptada = Encriptar.encriptar(contrasena);
+            String rutaFoto = request.getParameter("rutaFoto");
             String biografia = request.getParameter("biografia");
             String marca = request.getParameter("marca");
             String modelo = request.getParameter("modelo");
 
             try {
-                if (marca == null || marca.isEmpty() || modelo.isEmpty() || modelo == null) {
+                if (marca == null || modelo == null || marca.isEmpty() || modelo.isEmpty()) {
                     request.setAttribute("faltaVehiculo", "Debes registrar un vehículo");
-                    vista = "FormUsuarios";
+                    vista = "FormUsuario";
                     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
                     rd.forward(request, response);
                 } else {
@@ -112,7 +135,7 @@ public class ControladorUsuario extends HttpServlet {
 
                     if (!lu.isEmpty()) {
                         request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                        vista = "FormUsuarios";
+                        vista = "FormUsuario";
                         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
                         rd.forward(request, response);
                     } else {
@@ -120,9 +143,14 @@ public class ControladorUsuario extends HttpServlet {
                         LocalDateTime fechaRegistro = LocalDateTime.now();
                         ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
 
-                        Usuarios u = new Usuarios(nombre, correo, biografia, contrasena, fechaRegistro, moto, rutas);
+                        //como no se lo que contiene lo pongo a ""
+                        if (rutaFoto.isEmpty()) {
+                            rutaFoto = "";
+                        }
+
+                        Usuarios u = new Usuarios(nombre, correo, biografia, contraseñaEncriptada, fechaRegistro, rutaFoto, moto, rutas);
                         guardarUsuario(u);
-                        response.sendRedirect("/miapp/usuarios");
+                        response.sendRedirect("/miapp/inicio");
                     }
                 }
 
@@ -131,22 +159,35 @@ public class ControladorUsuario extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                 rd.forward(request, response);
             }
-        } else if (accion.equals("/loguear")) {
+        } else if (accion.equals("/login")) {
             //los campos "name" del formUsuarios:
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
+            String contraseñaEncriptada = Encriptar.encriptar(contrasena);
 
             try {
                 TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
                 q.setParameter("correo", correo);
                 List<Usuarios> lu = q.getResultList();
 
-                //comprobar si no esta vacio y si la contraseña y el correo coinciden
-                if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contrasena) && lu.get(0).getCorreo().equals(correo)) {
+                //comprobar si no esta vacio y si la contraseña coincide (no compruebo el correo porque ya lo hago arriba)
+                if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contraseñaEncriptada)) {
 
                     Usuarios usuarioLogueado = lu.get(0);
                     request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
-                    response.sendRedirect("/miapp/usuarios");
+
+                    //logica del check box de "recuerdame"
+                    /*String recuerdame = request.getParameter("recuerdame");
+                    if (recuerdame != null && recuerdame.equals("on")) {
+                        //creamos el token persistente
+                        String token = usuarioLogueado.getId().toString();
+                        Cookie cookieRecordarme = new Cookie("token_recuerdame", token);
+
+                        //dura 30 dias (en segundos)
+                        cookieRecordarme.setMaxAge(30 * 24 * 60 * 60);
+                        response.addCookie(cookieRecordarme);
+                    }*/
+                    response.sendRedirect("/miapp/inicio");
                 } else {
                     request.setAttribute("loginIncorrecto", "Correo o contraseña incorrectos.");
                     vista = "IniciarSesion";

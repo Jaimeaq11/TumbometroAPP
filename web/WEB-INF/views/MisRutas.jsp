@@ -3,18 +3,16 @@
 
 <div class="row">
     <div class="col-8">
-        <h6 class="display-6">Mis Rutas</h6>
+        <h6 class="texto mt-5 mb-3">Mis Rutas</h6>
     </div>
     <div class="col-4 d-flex align-items-center justify-content-end">
-        <%-- Botón para ir al formulario de crear ruta (que harás después) --%>
-        <a href="<c:url value='/usuario/crear-ruta' />" role="button" class="btn btn-primary">
+        <a href="/miapp/usuario/crear-ruta" role="button" class="btn btn-primary">
             + Añadir Ruta
         </a>
     </div>
 </div>
 
 
-<%-- Comprobamos si la lista NO está vacía --%>
 <c:if test="${!empty requestScope.misRutas}">
 
     <div>    
