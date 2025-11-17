@@ -31,10 +31,10 @@
                     <div class="carousel-caption">
                         <h1 style="color: white;">Tu diario de rutas.</h1>
                         <p class="opacity-100" style="color: #cccccc; font-size: 23px;">Con tu moto hasta el último kilómetro, guarda todos los detalles de tus aventuras.</p>
-                        <c:if test="${!empty requestScope.usuarioEditado}">
+                        <c:if test="${!empty requestScope.usuarioLogueado}">
                             <p><a class="btn btn-lg btn-primary" href="/miapp/usuario/mis-rutas">Añadir nuevas rutas</a></p>
                         </c:if>
-                        <c:if test="${empty requestScope.usuarioEditado}">
+                        <c:if test="${empty requestScope.usuarioLogueado}">
                             <p><a class="btn btn-lg btn-primary" href="/miapp/usuario/iniciar-sesion">Añadir nuevas rutas</a></p>
                         </c:if>
                     </div>
@@ -67,25 +67,30 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="imagenes/casco.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
-                <h2 class="fw-normal mt-3">Tu perfil de motero</h2>
-                <p>Sube tu foto de perfil, escribe tu biografía y deja que la comunidad conozca al motero detrás del casco.</p>
-                <p><a class="btn btn-secondary" href="/miapp/usuario/nuevo">Ver detalles »</a></p>
+                <h2 class="fw-normal mt-3 mb-3">Tu perfil de motero</h2>
+                <p class="mb-4">Sube tu foto de perfil, escribe tu biografía y deja que la comunidad conozca al motero detrás del casco.</p>
+                <a href="/miapp/inicio" class="elboton mx-auto" role="button">
+                    <span class="elspan">Ver detalles »</span>
+                </a>
             </div>
             <div class="col-lg-4">
                 <img src="imagenes/moto.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
-                <h2 class="fw-normal mt-3">El garaje virtual</h2>
-                <p>Añade los detalles de tu moto a tu perfil. Desde el modelo hasta el color, tu máquina es la protagonista</p>
-                <p><a class="btn btn-secondary" href="#">Ver detalles »</a></p>
+                <h2 class="fw-normal mt-3 mb-3">El garaje virtual</h2>
+                <p class="mb-4">Añade los detalles de tu moto a tu perfil. Desde el modelo hasta el color, tu máquina es la protagonista</p>
+                <a href="/miapp/inicio" class="elboton mx-auto" role="button">
+                    <span class="elspan">Ver detalles »</span>
+                </a>
             </div>
             <div class="col-lg-4">
                 <img src="imagenes/carretera.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
-                <h2 class="fw-normal mt-2">Explora y descubre</h2>
-                <p>Filtra las rutas de la comunidad por marca de moto, dificultad o kilómetros para encontrar tu próxima gran aventura.</p>
-                <p><a class="btn btn-secondary" href="#">Ver detalles »</a></p>
+                <h2 class="fw-normal mt-3 mb-3">Explora y descubre</h2>
+                <p class="mb-4">Filtra las rutas de la comunidad por marca de moto, dificultad o kilómetros para planear tu próxima salida.</p>
+                <a href="/miapp/inicio" class="elboton mx-auto" role="button">
+                    <span class="elspan">Ver detalles »</span>
+                </a>
             </div>
         </div>
 
-        <hr class="featurette-divider">
 
         <!--
        <div class="row featurette">
@@ -137,7 +142,7 @@
        <hr class="featurette-divider">
    </div>
         -->
-        </main>
+</main>
 
 
-        <%@include file="plantillas/footer.jspf" %>
+<%@include file="plantillas/footer.jspf" %>

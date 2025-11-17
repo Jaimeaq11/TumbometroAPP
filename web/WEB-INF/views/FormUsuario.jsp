@@ -3,7 +3,14 @@
 
 <div class="container justify-content-center">
     <main class="formulariousuarios w-100 m-auto">
-        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/guardar" method="POST" enctype="multipart/form-data">
+
+        <!-- logica para comprobar si es editar o registrar -->
+        <c:set var="accion" value="registrar" />
+        <c:if test="${!empty requestScope.usuarioEditado}">
+            <c:set var="accion" value="editar" />
+        </c:if>
+
+        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/${accion}" method="POST" enctype="multipart/form-data">
             <img class="" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
             <!-- usamos el value para referirnos a editar o a registar -->

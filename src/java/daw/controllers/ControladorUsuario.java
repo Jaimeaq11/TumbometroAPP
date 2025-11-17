@@ -35,7 +35,7 @@ public class ControladorUsuario extends HttpServlet {
     @Resource
     private UserTransaction utx;
     private static final Logger Log = Logger.getLogger(ControladorUsuario.class.getName());
-    
+
     private static final String directorio_url = "imagenes" + File.separator + "perfiles";
 
     @Override
@@ -67,7 +67,7 @@ public class ControladorUsuario extends HttpServlet {
                 request.setAttribute("usuarioEditado", usuarioLogueado);
                 vista = "FormUsuario";
             }
-            
+
             case "/iniciar-sesion" -> {
                 vista = "IniciarSesion";
             }
@@ -109,12 +109,9 @@ public class ControladorUsuario extends HttpServlet {
 
         String vista;
         String accion = request.getPathInfo();
-        if (accion.equals("/guardar")) {
-            
-        }
         if (accion.equals("/registrar")) {
 
-            //los campos "name" del formUsuarios:
+            //los campos "name" del formUsuario:
             String nombre = request.getParameter("nombre");
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
@@ -162,8 +159,49 @@ public class ControladorUsuario extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                 rd.forward(request, response);
             }
+
+        } else if (accion.equals("/editar")) {
+
+            //los campos "name" del formUsuario:
+            String nombre = request.getParameter("nombre");
+            String correo = request.getParameter("correo");
+            String rutaFoto = request.getParameter("rutaFoto");
+            String biografia = request.getParameter("biografia");
+
+            try {
+                Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
+
+                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                q.setParameter("correo", correo);
+                List<Usuarios> lu = q.getResultList();
+
+                if (!lu.isEmpty() && !lu.get(0).getCorreo().equals(usuarioLogueado.getCorreo())) {
+                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                    vista = "FormUsuario";
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                    rd.forward(request, response);
+
+                } else {
+                    usuarioLogueado.setNombre(nombre);
+                    usuarioLogueado.setCorreo(correo);
+                    usuarioLogueado.setBiografia(biografia);
+                    usuarioLogueado.setRutaFoto(rutaFoto);
+
+                    guardarUsuario(usuarioLogueado);
+
+                    //actualiza la sesion
+                    request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
+                    response.sendRedirect("/miapp/inicio");
+                }
+
+            } catch (Exception e) {
+                request.setAttribute("msg", "Error: datos no válidos");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                rd.forward(request, response);
+            }
+
         } else if (accion.equals("/login")) {
-            //los campos "name" del formUsuarios:
+            //los campos "name" del formUsuario:
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
             String contraseñaEncriptada = Encriptar.encriptar(contrasena);

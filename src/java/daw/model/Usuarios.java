@@ -56,7 +56,7 @@ public class Usuarios implements Serializable {
         this.rutas = rutas;
         this.rutaFoto = rutaFoto;
     }
-
+    
     public Long getId() {
         return id;
     }

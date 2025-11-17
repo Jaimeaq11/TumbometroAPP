@@ -11,11 +11,12 @@
         <link href="/miapp/css/main.css" rel="stylesheet" type="text/css"/>
         <link href="/miapp/css/centrar.css" rel="stylesheet" type="text/css"/>
         <link href="/miapp/css/carrousel.css" rel="stylesheet" type="text/css"/>
+        <link href="/miapp/css/botones.css" rel="stylesheet" type="text/css"/>
 
     </head>
     <body>
 
-        <header class="p-2 text-bg-dark">
+        <header class="p-2 elheader">
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 

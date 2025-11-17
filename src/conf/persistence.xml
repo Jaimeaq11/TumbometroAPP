@@ -5,7 +5,7 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
-      <!--<property name="jakarta.persistence.sql-load-script-source" value="inicial.sql"/>-->
+      <property name="jakarta.persistence.sql-load-script-source" value="inicial.sql"/>
     </properties>
   </persistence-unit>
 </persistence>
