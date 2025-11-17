@@ -19,7 +19,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
-@WebServlet(name = "ControladorPrincipal", urlPatterns = {"/inicio", "/precios"})
+@WebServlet(name = "ControladorPrincipal", urlPatterns = {
+    "/inicio",
+    "/precios",
+    "/iniciar-sesion"})
+
 public class ControladorPrincipal extends HttpServlet {
 
     @PersistenceContext(unitName = "ElTumbometroPU")
@@ -36,6 +40,11 @@ public class ControladorPrincipal extends HttpServlet {
         switch (accion) {
             case "/inicio" -> {
                vista = "Inicio";
+            }
+            
+            //iniciar-sesion va en este controlador porque no depende de ningun usuario
+            case "/iniciar-sesion" -> {
+                vista = "IniciarSesion";
             }
             
             case "/precios" -> {

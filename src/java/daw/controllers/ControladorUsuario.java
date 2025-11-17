@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+//no puedo poner usuario/* si quiero controlar mis-rutas en el otro controlador
 @WebServlet(name = "ControladorUsuario", urlPatterns = {"/usuarios", "/usuario/*"})
+
 @MultipartConfig
 public class ControladorUsuario extends HttpServlet {
 
@@ -42,14 +44,14 @@ public class ControladorUsuario extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String vista;
-        String accion = "/usuarios";
-        if (request.getServletPath().equals("/usuario")) { //comprueba si es /miapp/usuario/*
-            if (request.getPathInfo() != null) { //el *
-                accion = request.getPathInfo();
-            } else {
-                accion = "error";
-            }
+        String accion;
+        
+        if (request.getServletPath().equals("/usuario") && request.getPathInfo() != null) {
+            accion = request.getPathInfo();
+        } else {
+            accion = "/usuarios";
         }
+
         switch (accion) {
             case "/usuarios" -> {
                 List<Usuarios> lu;
@@ -58,6 +60,7 @@ public class ControladorUsuario extends HttpServlet {
                 request.setAttribute("listausuarios", lu);
                 vista = "Usuarios";
             }
+            
             case "/nuevo" -> {
                 vista = "FormUsuario";
             }
@@ -67,10 +70,7 @@ public class ControladorUsuario extends HttpServlet {
                 request.setAttribute("usuarioEditado", usuarioLogueado);
                 vista = "FormUsuario";
             }
-
-            case "/iniciar-sesion" -> {
-                vista = "IniciarSesion";
-            }
+            
             case "/logout" -> {
                 request.getSession().invalidate();
 
@@ -81,19 +81,6 @@ public class ControladorUsuario extends HttpServlet {
                 //tenemos que hacerlo asi para que no se quede la ruta .../logout en la url
                 response.sendRedirect("/miapp/inicio");
                 return;
-            }
-            case "/mis-rutas" -> {
-                vista = "Error"; //asumimos con algun valor para que no de error
-                try {
-                    Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
-                    Usuarios usuario = em.find(Usuarios.class, usuarioLogueado.getId());
-                    List<Ruta> misRutas = usuario.getRutas();
-                    request.setAttribute("misRutas", misRutas);
-                    vista = "MisRutas";
-
-                } catch (Exception e) {
-                    request.setAttribute("msg", "Error al cargar tus rutas.");
-                }
             }
 
             default -> {
@@ -116,7 +103,7 @@ public class ControladorUsuario extends HttpServlet {
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
             String contraseñaEncriptada = Encriptar.encriptar(contrasena);
-            String rutaFoto = request.getParameter("rutaFoto");
+            //String rutaFoto = request.getParameter("rutaFoto");
             String biografia = request.getParameter("biografia");
             String marca = request.getParameter("marca");
             String modelo = request.getParameter("modelo");
@@ -144,11 +131,10 @@ public class ControladorUsuario extends HttpServlet {
                         ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
 
                         //como no se lo que contiene lo pongo a ""
-                        if (rutaFoto.isEmpty()) {
+                        /*if (rutaFoto.isEmpty()) {
                             rutaFoto = "";
-                        }
-
-                        Usuarios u = new Usuarios(nombre, correo, biografia, contraseñaEncriptada, fechaRegistro, rutaFoto, moto, rutas);
+                        }*/
+                        Usuarios u = new Usuarios(nombre, correo, biografia, contraseñaEncriptada, fechaRegistro, moto, rutas, "usuario");
                         guardarUsuario(u);
                         response.sendRedirect("/miapp/inicio");
                     }
@@ -165,7 +151,7 @@ public class ControladorUsuario extends HttpServlet {
             //los campos "name" del formUsuario:
             String nombre = request.getParameter("nombre");
             String correo = request.getParameter("correo");
-            String rutaFoto = request.getParameter("rutaFoto");
+            //String rutaFoto = request.getParameter("rutaFoto");
             String biografia = request.getParameter("biografia");
 
             try {
@@ -185,7 +171,7 @@ public class ControladorUsuario extends HttpServlet {
                     usuarioLogueado.setNombre(nombre);
                     usuarioLogueado.setCorreo(correo);
                     usuarioLogueado.setBiografia(biografia);
-                    usuarioLogueado.setRutaFoto(rutaFoto);
+                    //usuarioLogueado.setRutaFoto(rutaFoto);
 
                     guardarUsuario(usuarioLogueado);
 
@@ -213,9 +199,14 @@ public class ControladorUsuario extends HttpServlet {
 
                 //comprobar si no esta vacio y si la contraseña coincide (no compruebo el correo porque ya lo hago arriba)
                 if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contraseñaEncriptada)) {
-
+                    
                     Usuarios usuarioLogueado = lu.get(0);
                     request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
+                    
+                    //compruebo si es admin
+                    if (usuarioLogueado.getRol().equals("admin")) {
+                        request.getSession().setAttribute("admin", true);
+                    }
 
                     //logica del check box de "recuerdame"
                     /*String recuerdame = request.getParameter("recuerdame");
@@ -237,7 +228,6 @@ public class ControladorUsuario extends HttpServlet {
                 }
 
             } catch (Exception e) {
-                request.setAttribute("msg", "Error: datos no válidos");
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                 rd.forward(request, response);
             }

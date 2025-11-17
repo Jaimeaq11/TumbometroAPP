@@ -14,88 +14,96 @@
         <link href="/miapp/css/botones.css" rel="stylesheet" type="text/css"/>
 
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
 
-        <header class="p-2 elheader">
-            <div class="container-fluid">
-                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div class="page-wrapper">
 
-                    <!-- Logo -->
-                    <a href="/miapp" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                        <img src="/miapp/imagenes/logo.png" width="100" height="100" class="m-4">
-                    </a>
+            <header class="p-2 elheader">
+                <div class="container-fluid">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-                    <!-- Botones -->
-                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li>
-                            <a href="/miapp" class="nav-link px-4 text-white d-flex align-items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" class="me-2"><path fill="#cccccc" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></svg>
-                                <span>Inicio</span>
-                            </a>
-                        </li>
-                        <c:if test="${!empty sessionScope.usuarioLogueado}">
+                        <!-- Logo -->
+                        <a href="/miapp" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                            <img src="/miapp/imagenes/logo.png" width="100" height="100" class="m-4">
+                        </a>
+
+                        <!-- Botones -->
+                        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                             <li>
-                                <a href="/miapp/usuario/mis-rutas" class="nav-link px-4 text-white d-flex align-items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="#cccccc"><path d="M19.95 3.033c.596-.036 1.08.452 1.08 1.049s-.485 1.078-1.08 1.119A15.87 15.87 0 0 0 5.2 19.95c-.04.596-.52 1.08-1.118 1.08s-1.085-.484-1.05-1.08A18.03 18.03 0 0 1 19.95 3.033m-5.883 17.018l.002-.009a7.03 7.03 0 0 1 5.973-5.974l.01-.001q.105-.015.204-.05c.441-.146.775-.537.775-1.01c0-.548-.446-.998-.99-.937a9 9 0 0 0-.46.062a9.02 9.02 0 0 0-6.88 5.448a9 9 0 0 0-.631 2.46c-.06.545.39.99.937.99c.474 0 .864-.333 1.011-.774q.033-.1.05-.205m5.645-10.722q.655-.075 1.317-.074V7.752q-.746 0-1.486.084z"/><path d="M16.526 10.15q.613-.252 1.246-.435l-.416-1.444a13.3 13.3 0 0 0-2.746 1.137l.727 1.316q.578-.32 1.19-.573m-3.819 2.551q.468-.468.984-.88l-.937-1.174a13.3 13.3 0 0 0-2.101 2.102l1.174.937q.411-.517.88-.985m-2.551 3.818q.253-.611.572-1.188l-1.315-.727a13.3 13.3 0 0 0-1.137 2.746l1.444.416q.182-.635.435-1.246m-.896 4.504q0-.662.075-1.318L7.84 19.54q-.083.739-.083 1.486z"/></g></svg>
-                                    <span class="ms-2">Mis rutas</span>
+                                <a href="/miapp" class="nav-link px-4 text-white d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" class="me-2"><path fill="#cccccc" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></svg>
+                                    <span>Inicio</span>
                                 </a>
                             </li>
+                            <c:if test="${!empty sessionScope.usuarioLogueado}">
+                                <li>
+                                    <a href="/miapp/mis-rutas" class="nav-link px-4 text-white d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="#cccccc"><path d="M19.95 3.033c.596-.036 1.08.452 1.08 1.049s-.485 1.078-1.08 1.119A15.87 15.87 0 0 0 5.2 19.95c-.04.596-.52 1.08-1.118 1.08s-1.085-.484-1.05-1.08A18.03 18.03 0 0 1 19.95 3.033m-5.883 17.018l.002-.009a7.03 7.03 0 0 1 5.973-5.974l.01-.001q.105-.015.204-.05c.441-.146.775-.537.775-1.01c0-.548-.446-.998-.99-.937a9 9 0 0 0-.46.062a9.02 9.02 0 0 0-6.88 5.448a9 9 0 0 0-.631 2.46c-.06.545.39.99.937.99c.474 0 .864-.333 1.011-.774q.033-.1.05-.205m5.645-10.722q.655-.075 1.317-.074V7.752q-.746 0-1.486.084z"/><path d="M16.526 10.15q.613-.252 1.246-.435l-.416-1.444a13.3 13.3 0 0 0-2.746 1.137l.727 1.316q.578-.32 1.19-.573m-3.819 2.551q.468-.468.984-.88l-.937-1.174a13.3 13.3 0 0 0-2.101 2.102l1.174.937q.411-.517.88-.985m-2.551 3.818q.253-.611.572-1.188l-1.315-.727a13.3 13.3 0 0 0-1.137 2.746l1.444.416q.182-.635.435-1.246m-.896 4.504q0-.662.075-1.318L7.84 19.54q-.083.739-.083 1.486z"/></g></svg>
+                                        <span class="ms-2">Mis rutas</span>
+                                    </a>
+                                </li>
+                            </c:if>
+
+                            <li>
+                                <a href="/miapp/usuarios" class="nav-link px-4 text-white d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2m1-17.87a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+                                    <span class="ms-2">Usuarios registrados</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/miapp/precios" class="nav-link px-4 text-white d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 12 12"><path fill="#cccccc" d="M3 1h1.046L2.997 4H1.191l1.362-2.724A.5.5 0 0 1 3 1M1.227 5l3.014 4.687L2.97 5zm2.779 0l1.53 5.645a.48.48 0 0 0 .928 0L7.998 5zm5.028 0L7.76 9.685L10.773 5zm1.775-1H9.006l-1.05-3H9a.5.5 0 0 1 .448.276zM7.947 4h-3.89l1.048-3h1.79z"/></svg>
+                                    <span class="ms-2">Precios</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-4 text-white d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" class="me-2"><path fill="#cccccc" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></svg>
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                            <input type="search" class="form-control" placeholder="Buscar..." aria-label="Search">
+                        </form>
+
+                        <c:if test="${empty sessionScope.usuarioLogueado}">
+                            <div class="text-end">
+                                <a href="/miapp/iniciar-sesion" role="button" class="btn btn-outline-light me-2">Iniciar sesión</a>
+                                <a href="/miapp/usuario/nuevo" role="button" class="btn btn-primary">Registrarse</a>
+                            </div>
                         </c:if>
 
-                        <li>
-                            <a href="/miapp/usuario/usuarios" class="nav-link px-4 text-white d-flex align-items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2m1-17.87a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-                                <span class="ms-2">Usuarios registrados</span>
-                            </a>
-                        </li>
+                        <c:if test="${!empty sessionScope.usuarioLogueado}">
 
-                        <li>
-                            <a href="/miapp/precios" class="nav-link px-4 text-white d-flex align-items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 12 12"><path fill="#cccccc" d="M3 1h1.046L2.997 4H1.191l1.362-2.724A.5.5 0 0 1 3 1M1.227 5l3.014 4.687L2.97 5zm2.779 0l1.53 5.645a.48.48 0 0 0 .928 0L7.998 5zm5.028 0L7.76 9.685L10.773 5zm1.775-1H9.006l-1.05-3H9a.5.5 0 0 1 .448.276zM7.947 4h-3.89l1.048-3h1.79z"/></svg>
-                                <span class="ms-2">Precios</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-4 text-white d-flex align-items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" class="me-2"><path fill="#cccccc" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></svg>
-                                <span>About</span>
-                            </a>
-                        </li>
-                    </ul>
+                            <!-- Perfil -->
+                            <div class="dropdown text-end">
+                                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span>${sessionScope.usuarioLogueado.nombre}</span>
 
-                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                        <input type="search" class="form-control" placeholder="Buscar..." aria-label="Search">
-                    </form>
+                                    <!-- Logo de perfil -->
+                                    <c:if test="${!empty sessionScope.admin}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#ffea00" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5Zm0 3.9a3 3 0 1 1-3 3a3 3 0 0 1 3-3m0 7.9c2 0 6 1.09 6 3.08a7.2 7.2 0 0 1-12 0c0-1.99 4-3.08 6-3.08"/></svg>
+                                    </c:if>
 
-                    <c:if test="${empty sessionScope.usuarioLogueado}">
-                        <div class="text-end">
-                            <a href="/miapp/usuario/iniciar-sesion" role="button" class="btn btn-outline-light me-2">Iniciar sesión</a>
-                            <a href="/miapp/usuario/nuevo" role="button" class="btn btn-primary">Registrarse</a>
-                        </div>
-                    </c:if>
+                                    <c:if test="${empty sessionScope.admin}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 448 512"><path fill="#cccccc" d="M224 256a128 128 0 1 0 0-256a128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7c0-98.5-79.8-178.3-178.3-178.3z"/></svg>
+                                    </c:if>
+                                </a>
 
-                    <c:if test="${!empty sessionScope.usuarioLogueado}">
-
-                        <!-- Perfil -->
-                        <div class="dropdown text-end">
-                            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span>${sessionScope.usuarioLogueado.nombre}</span>
-
-                                <!-- Logo de perfil -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" stroke="#cccccc" stroke-width="1.5"><path stroke-linejoin="round" d="M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="12" cy="7" r="3"/></g></svg>
-                            </a>
-
-                            <ul class="dropdown-menu text-small dropdown-menu-dark">
-                                <li>
-                                    <a class="dropdown-item" href="/miapp/usuario/editar">Editar perfil</a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="/miapp/usuario/logout">Cerrar Sesión</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </c:if>
+                                <ul class="dropdown-menu text-small dropdown-menu-dark">
+                                    <li>
+                                        <a class="dropdown-item" href="/miapp/usuario/editar">Editar perfil</a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="/miapp/usuario/logout">Cerrar Sesión</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>

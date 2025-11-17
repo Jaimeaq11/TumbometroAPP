@@ -13,8 +13,6 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Table(name = "usuarios")
 @NamedQueries({
@@ -36,17 +34,17 @@ public class Usuarios implements Serializable {
     private String biografia;
     private String contrasena;
     private LocalDateTime fechaRegistro;
-    private String rutaFoto;
+    //private String rutaFoto;
     private Moto moto;
+    private String rol;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private ArrayList<Ruta> rutas = new ArrayList<>();
-
-    //private String rol; //implementar
+    
     public Usuarios() {
     }
 
-    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, String rutaFoto, Moto moto, ArrayList<Ruta> rutas) {
+    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, Moto moto, ArrayList<Ruta> rutas, String rol) {
         this.nombre = nombre;
         this.correo = correo;
         this.biografia = biografia;
@@ -54,7 +52,7 @@ public class Usuarios implements Serializable {
         this.moto = moto;
         this.fechaRegistro = fechaRegistro;
         this.rutas = rutas;
-        this.rutaFoto = rutaFoto;
+        this.rol = rol;
     }
     
     public Long getId() {
@@ -94,14 +92,6 @@ public class Usuarios implements Serializable {
         return rutas;
     }
 
-    public String getRutaFoto() {
-        return rutaFoto;
-    }
-
-    public void setRutaFoto(String rutaFoto) {
-        this.rutaFoto = rutaFoto;
-    }
-
     public void setRutas(ArrayList<Ruta> rutas) {
         this.rutas = rutas;
     }
@@ -130,13 +120,6 @@ public class Usuarios implements Serializable {
         this.fechaRegistro = fechaRegistro;
     }
 
-    /*public List<Ruta> getRutas() {
-        return rutas;
-    }
-
-    public void setRutas(List<Ruta> rutas) {
-        this.rutas = rutas;
-    }*/
     public String getBiografia() {
         return biografia;
     }
@@ -159,5 +142,13 @@ public class Usuarios implements Serializable {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }
