@@ -33,7 +33,6 @@ public class Usuarios implements Serializable {
     private String correo;
     private String biografia;
     private String contrasena;
-    private LocalDateTime fechaRegistro;
     //private String rutaFoto;
     private Moto moto;
     private String rol;
@@ -44,13 +43,12 @@ public class Usuarios implements Serializable {
     public Usuarios() {
     }
 
-    public Usuarios(String nombre, String correo, String biografia, String contrasena, LocalDateTime fechaRegistro, Moto moto, ArrayList<Ruta> rutas, String rol) {
+    public Usuarios(String nombre, String correo, String biografia, String contrasena, Moto moto, ArrayList<Ruta> rutas, String rol) {
         this.nombre = nombre;
         this.correo = correo;
         this.biografia = biografia;
         this.contrasena = contrasena;
         this.moto = moto;
-        this.fechaRegistro = fechaRegistro;
         this.rutas = rutas;
         this.rol = rol;
     }
@@ -110,14 +108,6 @@ public class Usuarios implements Serializable {
 
     public void setCorreo(String correo) {
         this.correo = correo;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
     }
 
     public String getBiografia() {

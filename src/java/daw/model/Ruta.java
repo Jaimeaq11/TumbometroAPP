@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,29 +21,15 @@ public class Ruta implements Serializable {
     private Long id;
     
     private String nombre;
-    private double distanciaRecorrida;      
-    private double tiempo;                   
-    private double inclinacionMaxima;        
-    private Date fecha;                 
-    private double velocidadMaxima;          
-    private double velocidadMedia;
+    private String descripcion;
+    private double distancia;
+    private double tiempo;
+    private double inclinacionMaxima;   
+    private String dificultad;
+    private String tipoCarretera; //offroad, costa, montaña...    
     
     @ManyToOne(fetch=FetchType.LAZY)
     private Usuarios usuario;
-    
-    public Ruta() {
-    }
-
-    public Ruta(Long id, String nombre, double distanciaRecorrida, double tiempo, double inclinacionMaxima, Date fecha, double velocidadMaxima, double velocidadMedia) {
-        this.id = id;
-        this.nombre = nombre;
-        this.distanciaRecorrida = distanciaRecorrida;
-        this.tiempo = tiempo;
-        this.inclinacionMaxima = inclinacionMaxima;
-        this.fecha = fecha;
-        this.velocidadMaxima = velocidadMaxima;
-        this.velocidadMedia = velocidadMedia;
-    }
 
     public Long getId() {
         return id;
@@ -51,7 +38,7 @@ public class Ruta implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -60,12 +47,20 @@ public class Ruta implements Serializable {
         this.nombre = nombre;
     }
 
-    public double getDistanciaRecorrida() {
-        return distanciaRecorrida;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDistanciaRecorrida(double distanciaRecorrida) {
-        this.distanciaRecorrida = distanciaRecorrida;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public double getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(double distancia) {
+        this.distancia = distancia;
     }
 
     public double getTiempo() {
@@ -84,30 +79,30 @@ public class Ruta implements Serializable {
         this.inclinacionMaxima = inclinacionMaxima;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public String getDificultad() {
+        return dificultad;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setDificultad(String dificultad) {
+        this.dificultad = dificultad;
     }
 
-    public double getVelocidadMaxima() {
-        return velocidadMaxima;
+    public String getTipoCarretera() {
+        return tipoCarretera;
     }
 
-    public void setVelocidadMaxima(double velocidadMaxima) {
-        this.velocidadMaxima = velocidadMaxima;
+    public void setTipoCarretera(String tipoCarretera) {
+        this.tipoCarretera = tipoCarretera;
     }
 
-    public double getVelocidadMedia() {
-        return velocidadMedia;
+    public Usuarios getUsuario() {
+        return usuario;
     }
 
-    public void setVelocidadMedia(double velocidadMedia) {
-        this.velocidadMedia = velocidadMedia;
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

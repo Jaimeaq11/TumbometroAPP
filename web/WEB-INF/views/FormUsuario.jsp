@@ -10,16 +10,16 @@
             <c:set var="accion" value="editar" />
         </c:if>
 
+        
         <form id="formulario" class="formulariousuarios" action="/miapp/usuario/${accion}" method="POST" enctype="multipart/form-data">
-            <img class="" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
-            <!-- usamos el value para referirnos a editar o a registar -->
-
+            <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
+            
             <c:if test="${!empty requestScope.usuarioEditado}">
-                <h3 class="mt-5 mb-3">Editar perfil</h3>
+                <h3 class="titulo mt-4 mb-3">Editar perfil</h3>
             </c:if>
             <c:if test="${empty requestScope.usuarioEditado}">
-                <h3 class="mt-5 mb-3">Registrar usuario</h3>
+                <h3 class="titulo mt-4 mb-3">Registrar usuario</h3>
             </c:if>
 
             <div class="row g-3">
@@ -112,6 +112,15 @@
                 <button type="submit" class="btn btn-primary w-100 py-2 mb-5">Registrarse</button>
             </c:if> 
         </form>
+
+        <c:if test="${!empty requestScope.usuarioEditado}">
+            <h3 class="mt-5 mb-3 titulo text-danger">¡Zona de peligro!</h3>
+
+            <form action="/miapp/usuario/eliminar-cuenta" method="POST">
+                <input type="hidden" name="id" value="${requestScope.usuarioEditado.id}">
+                <button type="submit" class="btn btn-danger d-block mx-auto w-100 mb-4 mt-4 mt-3 py-2" onclick="return confirm('¿Estás seguro de que quieres borrar este usuario?');">Eliminar cuenta</button>
+            </form>
+        </c:if>
     </main>
 </div>
 

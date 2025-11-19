@@ -38,14 +38,13 @@ public class ControladorUsuario extends HttpServlet {
     private UserTransaction utx;
     private static final Logger Log = Logger.getLogger(ControladorUsuario.class.getName());
 
-    private static final String directorio_url = "imagenes" + File.separator + "perfiles";
-
+    //private static final String directorio_url = "imagenes" + File.separator + "perfiles";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String vista;
         String accion;
-        
+
         if (request.getServletPath().equals("/usuario") && request.getPathInfo() != null) {
             accion = request.getPathInfo();
         } else {
@@ -60,7 +59,7 @@ public class ControladorUsuario extends HttpServlet {
                 request.setAttribute("listausuarios", lu);
                 vista = "Usuarios";
             }
-            
+
             case "/nuevo" -> {
                 vista = "FormUsuario";
             }
@@ -70,7 +69,7 @@ public class ControladorUsuario extends HttpServlet {
                 request.setAttribute("usuarioEditado", usuarioLogueado);
                 vista = "FormUsuario";
             }
-            
+
             case "/logout" -> {
                 request.getSession().invalidate();
 
@@ -96,120 +95,124 @@ public class ControladorUsuario extends HttpServlet {
 
         String vista;
         String accion = request.getPathInfo();
-        if (accion.equals("/registrar")) {
 
-            //los campos "name" del formUsuario:
-            String nombre = request.getParameter("nombre");
-            String correo = request.getParameter("correo");
-            String contrasena = request.getParameter("contrasena");
-            String contraseñaEncriptada = Encriptar.encriptar(contrasena);
-            //String rutaFoto = request.getParameter("rutaFoto");
-            String biografia = request.getParameter("biografia");
-            String marca = request.getParameter("marca");
-            String modelo = request.getParameter("modelo");
+        switch (accion) {
 
-            try {
-                if (marca == null || modelo == null || marca.isEmpty() || modelo.isEmpty()) {
-                    request.setAttribute("faltaVehiculo", "Debes registrar un vehículo");
-                    vista = "FormUsuario";
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+            case "/registrar" -> {
+
+                //los campos "name" del formUsuario:
+                String nombre = request.getParameter("nombre");
+                String correo = request.getParameter("correo");
+                String contrasena = request.getParameter("contrasena");
+                String contraseñaEncriptada = Encriptar.encriptar(contrasena);
+                //String rutaFoto = request.getParameter("rutaFoto");
+                String biografia = request.getParameter("biografia");
+                String marca = request.getParameter("marca");
+                String modelo = request.getParameter("modelo");
+
+                try {
+                    if (marca == null || modelo == null || marca.isEmpty() || modelo.isEmpty()) {
+                        request.setAttribute("faltaVehiculo", "Debes registrar un vehículo");
+                        vista = "FormUsuario";
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                        rd.forward(request, response);
+                    } else {
+
+                        TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                        q.setParameter("correo", correo);
+                        List<Usuarios> lu = q.getResultList();
+
+                        if (!lu.isEmpty()) {
+                            request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                            vista = "FormUsuario";
+                            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                            rd.forward(request, response);
+                        } else {
+                            Moto moto = new Moto(marca, modelo);
+                            ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
+
+                            //como no se lo que contiene lo pongo a ""
+                            /*if (rutaFoto.isEmpty()) {
+                            rutaFoto = "";
+                        }*/
+                            Usuarios u = new Usuarios(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
+                            guardarUsuario(u);
+                            response.sendRedirect("/miapp/inicio");
+                        }
+                    }
+
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error: datos no válidos");
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                     rd.forward(request, response);
-                } else {
+                }
+            }
+
+            case "/editar" -> {
+
+                //los campos "name" del formUsuario:
+                String nombre = request.getParameter("nombre");
+                String correo = request.getParameter("correo");
+                //String rutaFoto = request.getParameter("rutaFoto");
+                String biografia = request.getParameter("biografia");
+
+                try {
+                    Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
 
                     TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
                     q.setParameter("correo", correo);
                     List<Usuarios> lu = q.getResultList();
 
-                    if (!lu.isEmpty()) {
+                    if (!lu.isEmpty() && !lu.get(0).getCorreo().equals(usuarioLogueado.getCorreo())) {
                         request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
                         vista = "FormUsuario";
                         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
                         rd.forward(request, response);
-                    } else {
-                        Moto moto = new Moto(marca, modelo);
-                        LocalDateTime fechaRegistro = LocalDateTime.now();
-                        ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
 
-                        //como no se lo que contiene lo pongo a ""
-                        /*if (rutaFoto.isEmpty()) {
-                            rutaFoto = "";
-                        }*/
-                        Usuarios u = new Usuarios(nombre, correo, biografia, contraseñaEncriptada, fechaRegistro, moto, rutas, "usuario");
-                        guardarUsuario(u);
+                    } else {
+                        usuarioLogueado.setNombre(nombre);
+                        usuarioLogueado.setCorreo(correo);
+                        usuarioLogueado.setBiografia(biografia);
+                        //usuarioLogueado.setRutaFoto(rutaFoto);
+
+                        guardarUsuario(usuarioLogueado);
+
+                        //actualiza la sesion
+                        request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
                         response.sendRedirect("/miapp/inicio");
                     }
-                }
 
-            } catch (Exception e) {
-                request.setAttribute("msg", "Error: datos no válidos");
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
-                rd.forward(request, response);
-            }
-
-        } else if (accion.equals("/editar")) {
-
-            //los campos "name" del formUsuario:
-            String nombre = request.getParameter("nombre");
-            String correo = request.getParameter("correo");
-            //String rutaFoto = request.getParameter("rutaFoto");
-            String biografia = request.getParameter("biografia");
-
-            try {
-                Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
-
-                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
-                q.setParameter("correo", correo);
-                List<Usuarios> lu = q.getResultList();
-
-                if (!lu.isEmpty() && !lu.get(0).getCorreo().equals(usuarioLogueado.getCorreo())) {
-                    request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                    vista = "FormUsuario";
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error: datos no válidos");
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                     rd.forward(request, response);
-
-                } else {
-                    usuarioLogueado.setNombre(nombre);
-                    usuarioLogueado.setCorreo(correo);
-                    usuarioLogueado.setBiografia(biografia);
-                    //usuarioLogueado.setRutaFoto(rutaFoto);
-
-                    guardarUsuario(usuarioLogueado);
-
-                    //actualiza la sesion
-                    request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
-                    response.sendRedirect("/miapp/inicio");
                 }
-
-            } catch (Exception e) {
-                request.setAttribute("msg", "Error: datos no válidos");
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
-                rd.forward(request, response);
             }
 
-        } else if (accion.equals("/login")) {
-            //los campos "name" del formUsuario:
-            String correo = request.getParameter("correo");
-            String contrasena = request.getParameter("contrasena");
-            String contraseñaEncriptada = Encriptar.encriptar(contrasena);
+            case "/login" -> {
+                //los campos "name" del formUsuario:
+                String correo = request.getParameter("correo");
+                String contrasena = request.getParameter("contrasena");
+                String contraseñaEncriptada = Encriptar.encriptar(contrasena);
 
-            try {
-                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
-                q.setParameter("correo", correo);
-                List<Usuarios> lu = q.getResultList();
+                try {
+                    TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                    q.setParameter("correo", correo);
+                    List<Usuarios> lu = q.getResultList();
 
-                //comprobar si no esta vacio y si la contraseña coincide (no compruebo el correo porque ya lo hago arriba)
-                if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contraseñaEncriptada)) {
-                    
-                    Usuarios usuarioLogueado = lu.get(0);
-                    request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
-                    
-                    //compruebo si es admin
-                    if (usuarioLogueado.getRol().equals("admin")) {
-                        request.getSession().setAttribute("admin", true);
-                    }
+                    //comprobar si no esta vacio y si la contraseña coincide (no compruebo el correo porque ya lo hago arriba)
+                    if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contraseñaEncriptada)) {
 
-                    //logica del check box de "recuerdame"
-                    /*String recuerdame = request.getParameter("recuerdame");
+                        Usuarios usuarioLogueado = lu.get(0);
+                        request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
+
+                        //compruebo si es admin
+                        if (usuarioLogueado.getRol().equals("admin")) {
+                            request.getSession().setAttribute("admin", true);
+                        }
+
+                        //logica del check box de "recuerdame"
+                        /*String recuerdame = request.getParameter("recuerdame");
                     if (recuerdame != null && recuerdame.equals("on")) {
                         //creamos el token persistente
                         String token = usuarioLogueado.getId().toString();
@@ -219,21 +222,69 @@ public class ControladorUsuario extends HttpServlet {
                         cookieRecordarme.setMaxAge(30 * 24 * 60 * 60);
                         response.addCookie(cookieRecordarme);
                     }*/
-                    response.sendRedirect("/miapp/inicio");
-                } else {
-                    request.setAttribute("loginIncorrecto", "Correo o contraseña incorrectos.");
-                    vista = "IniciarSesion";
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                        response.sendRedirect("/miapp/inicio");
+                    } else {
+                        request.setAttribute("loginIncorrecto", "Correo o contraseña incorrectos.");
+                        vista = "IniciarSesion";
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+                        rd.forward(request, response);
+                    }
+
+                } catch (Exception e) {
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                     rd.forward(request, response);
                 }
+            }
 
-            } catch (Exception e) {
+            case "/eliminar-usuario" -> {
+                String idParam = request.getParameter("id");
+
+                if (idParam != null) {
+                    try {
+                        Long id = Long.parseLong(idParam);
+
+                        eliminarUsuario(id);
+
+                    } catch (Exception e) {
+                        request.setAttribute("msg", "Error: datos no válidos");
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                        rd.forward(request, response);
+                    }
+                }
+
+                response.sendRedirect("/miapp/usuarios");
+                
+                //esto se hace para que no haga el forward
+                //return;
+            }
+            
+            case "/eliminar-cuenta" -> {
+                String idParam = request.getParameter("id");
+
+                if (idParam != null) {
+                    try {
+                        Long id = Long.parseLong(idParam);
+
+                        eliminarUsuario(id);
+                        request.getSession().invalidate();
+
+                    } catch (Exception e) {
+                        request.setAttribute("msg", "Error: datos no válidos");
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                        rd.forward(request, response);
+                    }
+                }
+
+                response.sendRedirect("/miapp/usuarios");
+                
+                //esto se hace para que no haga el forward
+                //return;
+            }
+
+            default -> {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                 rd.forward(request, response);
             }
-        } else {
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
-            rd.forward(request, response);
         }
     }
 
