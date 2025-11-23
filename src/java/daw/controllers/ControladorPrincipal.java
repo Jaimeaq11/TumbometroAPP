@@ -1,7 +1,7 @@
 package daw.controllers;
 
 import daw.model.Moto;
-import daw.model.Usuarios;
+import daw.model.Usuario;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -77,7 +77,7 @@ public class ControladorPrincipal extends HttpServlet {
                     throw new NullPointerException();
                 }
 
-                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                TypedQuery<Usuarios> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
                 q.setParameter("correo", correo);
                 List<Usuarios> lu = q.getResultList();
 
@@ -92,7 +92,7 @@ public class ControladorPrincipal extends HttpServlet {
                     
                     LocalDateTime fechaRegistro = LocalDateTime.now();
                     
-                    Usuarios u = new Usuarios(nombre, descripcion,  correo, contrasena, fechaRegistro, m);
+                    Usuario u = new Usuario(nombre, descripcion,  correo, contrasena, fechaRegistro, m);
                     guardarUsuario(u);
                     response.sendRedirect("/miapp/usuarios");
                 }

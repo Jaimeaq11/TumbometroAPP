@@ -3,34 +3,53 @@
 
 <c:if test="${!empty requestScope.misRutas}">
 
-    <h3 class="titulo">Tu diario de rutas</h3>
+    <a href="/miapp/mis-rutas/nueva-ruta" role="button" class="btn btn-primary mt-4 ms-4 px-4">Añadir ruta</a>
+    <h3 class="titulo mt-2 mb-3">Tu diario de rutas</h3>
 
-    <c:forEach var="ruta" items="${requestScope.misRutas}" >
+    <div class="row row-cols-1 row-cols-md-4 g-4 me-4 ms-4">
+        <c:forEach var="ruta" items="${requestScope.misRutas}" >
 
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="..." class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-8">
+            <div class="col">
+                <div class="card me-2 ms-2">
+                    <img src="${ruta.rutaFoto}" class="card-img-top"></img>
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                        <h6 class="display-6 card-title">${ruta.nombre}</h6>
+                        <p class="card-text">${ruta.descripcion}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Distancia: </b>${ruta.distancia} km</li>
+                        <li class="list-group-item"><b>Tiempo: </b>${ruta.tiempo} h</li>
+                        <li class="list-group-item"><b>Tipo de ruta: </b>${ruta.tipoCarretera}</li>
+                        <li class="list-group-item"><b>Dificultad: </b>
+                            <c:choose>
+                                <c:when test="${ruta.dificultad == 'Fácil'}">
+                                    <span class="dificultad-facil">${ruta.dificultad}</span>
+                                </c:when>
+                                <c:when test="${ruta.dificultad == 'Media'}">
+                                    <span class="dificultad-media">${ruta.dificultad}</span>
+                                </c:when>
+                                <c:when test="${ruta.dificultad == 'Difícil'}">
+                                    <span class="dificultad-dificil">${ruta.dificultad}</span>
+                                </c:when>
+                            </c:choose>
+                        </li>
+                    </ul>
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <a href="/miapp/mis-rutas/editar" role="button" class="btn btn-outline-warning me-3">Editar ruta</a>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </c:forEach>
-
+        </c:forEach>
+    </div>
 </c:if>
 
 
 <c:if test="${empty requestScope.misRutas}">
     <h3 class="titulo">No tienes ninguna ruta registrada!</h3>
     <div class="text-center">
-        <a href="/miapp/mis-rutas/nueva" role="button" class="btn btn-primary mt-3">Añadir nueva ruta</a>
+        <a href="/miapp/mis-rutas/nueva-ruta" role="button" class="btn btn-primary mt-3 me-3">Añadir nueva ruta</a>
+        <a href="/miapp/rutas" role="button" class="btn btn-primary mt-3">Buscar rutas en la comunidad</a>
     </div>
 </c:if>
 

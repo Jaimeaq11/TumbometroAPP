@@ -14,15 +14,15 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-@Table(name = "usuarios")
+@Table(name = "usuario")
 @NamedQueries({
-    @NamedQuery(name = "Usuarios.findAll", query = "SELECT u FROM Usuarios u"),
-    @NamedQuery(name = "Usuarios.findByName", query = "SELECT u FROM Usuarios u WHERE u.nombre = :nombre"),
-    @NamedQuery(name = "Usuarios.findByEmail", query = "SELECT u FROM Usuarios u WHERE u.correo = :correo")
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByName", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.correo = :correo")
 })
 
 @Entity
-public class Usuarios implements Serializable {
+public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,13 +37,13 @@ public class Usuarios implements Serializable {
     private Moto moto;
     private String rol;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuarioid", fetch = FetchType.LAZY)
     private ArrayList<Ruta> rutas = new ArrayList<>();
     
-    public Usuarios() {
+    public Usuario() {
     }
 
-    public Usuarios(String nombre, String correo, String biografia, String contrasena, Moto moto, ArrayList<Ruta> rutas, String rol) {
+    public Usuario(String nombre, String correo, String biografia, String contrasena, Moto moto, ArrayList<Ruta> rutas, String rol) {
         this.nombre = nombre;
         this.correo = correo;
         this.biografia = biografia;
@@ -71,10 +71,10 @@ public class Usuarios implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuarios)) {
+        if (!(object instanceof Usuario)) {
             return false;
         }
-        Usuarios other = (Usuarios) object;
+        Usuario other = (Usuario) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -83,7 +83,7 @@ public class Usuarios implements Serializable {
 
     @Override
     public String toString() {
-        return "daw.model.Usuarios[ id=" + id + " ]";
+        return "daw.model.Usuario[ id=" + id + " ]";
     }
 
     public ArrayList<Ruta> getRutas() {

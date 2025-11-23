@@ -1,7 +1,7 @@
 package daw.controllers;
 
 import daw.model.Ruta;
-import daw.model.Usuarios;
+import daw.model.Usuario;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -31,14 +31,16 @@ public class ControladorRutasPublicas extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            // Obtener todas las rutas públicas
-            List<Ruta> todasRutas = em.createQuery("SELECT r FROM Ruta r", Ruta.class).getResultList();
-            request.setAttribute("rutas", todasRutas);
+            List<Ruta> rutasPublicas = em.createQuery("SELECT r FROM Ruta r", Ruta.class).getResultList();
+            request.setAttribute("rutas", rutasPublicas);
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Rutas.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {
+            e.printStackTrace(); // ← ESTA LÍNEA ES CRÍTICA
+            System.out.println("ERROR DETALLADO eeeeeeeeeeeeeeeeeeeeeeeee: " + e.getMessage());
+            
             request.setAttribute("msg", "Error al cargar las rutas.");
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
             rd.forward(request, response);

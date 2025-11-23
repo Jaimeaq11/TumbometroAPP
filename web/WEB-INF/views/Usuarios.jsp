@@ -10,6 +10,7 @@
             <table class="table table-dark">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Biografia</th>
@@ -22,6 +23,7 @@
                 <tbody class="table-group-divider">
                     <c:forEach var="usuario" items="${requestScope.listausuarios}" >
                         <tr>
+                            <td>${usuario.id}</td>
                             <td>${usuario.nombre}</td>
                             <td>${usuario.correo}</td>
                             <td>${usuario.biografia}</td>

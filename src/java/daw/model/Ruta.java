@@ -5,6 +5,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
@@ -17,19 +18,23 @@ public class Ruta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
+
     private Long id;
-    
+
     private String nombre;
     private String descripcion;
     private double distancia;
     private double tiempo;
-    private double inclinacionMaxima;   
     private String dificultad;
     private String tipoCarretera; //offroad, costa, montaña...    
+    private String rutaFoto;
+
+    //@ManyToOne(fetch = FetchType.LAZY)
     
-    @ManyToOne(fetch=FetchType.LAZY)
-    private Usuarios usuario;
+    //esto es para que el id usuario de una ruta pueda ser null
+    @ManyToOne(optional = true) // <-- 'true' permite que sea null
+    @JoinColumn(name = "usuarioid", nullable = true) // <-- Le dice a la BBDD que acepte NULL
+    private Usuario usuarioid;
 
     public Long getId() {
         return id;
@@ -71,14 +76,6 @@ public class Ruta implements Serializable {
         this.tiempo = tiempo;
     }
 
-    public double getInclinacionMaxima() {
-        return inclinacionMaxima;
-    }
-
-    public void setInclinacionMaxima(double inclinacionMaxima) {
-        this.inclinacionMaxima = inclinacionMaxima;
-    }
-
     public String getDificultad() {
         return dificultad;
     }
@@ -95,13 +92,22 @@ public class Ruta implements Serializable {
         this.tipoCarretera = tipoCarretera;
     }
 
-    public Usuarios getUsuario() {
-        return usuario;
+    public Usuario getUsuarioid() {
+        return usuarioid;
     }
 
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
+    public void setUsuarioid(Usuario usuarioid) {
+        this.usuarioid = usuarioid;
     }
+
+    public String getRutaFoto() {
+        return rutaFoto;
+    }
+
+    public void setRutaFoto(String rutaFoto) {
+        this.rutaFoto = rutaFoto;
+    }
+    
     
     @Override
     public int hashCode() {
@@ -127,5 +133,4 @@ public class Ruta implements Serializable {
     public String toString() {
         return "daw.model.Ruta[ id=" + id + " ]";
     }
-    
 }

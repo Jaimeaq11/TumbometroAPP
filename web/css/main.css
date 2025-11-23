@@ -39,3 +39,16 @@ footer {
     text-align: center;
     margin-top: 200px;
 }
+
+/*para el color de la dificultad*/
+.dificultad-facil {
+    color: green;
+}
+
+.dificultad-media {
+    color: yellow;
+}
+
+.dificultad-dificil {
+    color: red;
+}

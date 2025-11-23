@@ -1,6 +1,6 @@
 package daw.controllers;
 
-import daw.model.Usuarios;
+import daw.model.Usuario;
 import daw.model.Moto;
 import daw.model.Ruta;
 import daw.util.Encriptar;
@@ -53,8 +53,8 @@ public class ControladorUsuario extends HttpServlet {
 
         switch (accion) {
             case "/usuarios" -> {
-                List<Usuarios> lu;
-                TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findAll", Usuarios.class);
+                List<Usuario> lu;
+                TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findAll", Usuario.class);
                 lu = q.getResultList();
                 request.setAttribute("listausuarios", lu);
                 vista = "Usuarios";
@@ -65,7 +65,7 @@ public class ControladorUsuario extends HttpServlet {
             }
 
             case "/editar" -> {
-                Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
+                Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
                 request.setAttribute("usuarioEditado", usuarioLogueado);
                 vista = "FormUsuario";
             }
@@ -98,7 +98,7 @@ public class ControladorUsuario extends HttpServlet {
 
         switch (accion) {
 
-            case "/registrar" -> {
+            case "/registrar-usuario" -> {
 
                 //los campos "name" del formUsuario:
                 String nombre = request.getParameter("nombre");
@@ -118,9 +118,9 @@ public class ControladorUsuario extends HttpServlet {
                         rd.forward(request, response);
                     } else {
 
-                        TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                        TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
                         q.setParameter("correo", correo);
-                        List<Usuarios> lu = q.getResultList();
+                        List<Usuario> lu = q.getResultList();
 
                         if (!lu.isEmpty()) {
                             request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
@@ -135,7 +135,7 @@ public class ControladorUsuario extends HttpServlet {
                             /*if (rutaFoto.isEmpty()) {
                             rutaFoto = "";
                         }*/
-                            Usuarios u = new Usuarios(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
+                            Usuario u = new Usuario(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
                             guardarUsuario(u);
                             response.sendRedirect("/miapp/inicio");
                         }
@@ -148,7 +148,7 @@ public class ControladorUsuario extends HttpServlet {
                 }
             }
 
-            case "/editar" -> {
+            case "/editar-usuario" -> {
 
                 //los campos "name" del formUsuario:
                 String nombre = request.getParameter("nombre");
@@ -157,11 +157,11 @@ public class ControladorUsuario extends HttpServlet {
                 String biografia = request.getParameter("biografia");
 
                 try {
-                    Usuarios usuarioLogueado = (Usuarios) request.getSession().getAttribute("usuarioLogueado");
+                    Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
 
-                    TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                    TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
                     q.setParameter("correo", correo);
-                    List<Usuarios> lu = q.getResultList();
+                    List<Usuario> lu = q.getResultList();
 
                     if (!lu.isEmpty() && !lu.get(0).getCorreo().equals(usuarioLogueado.getCorreo())) {
                         request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
@@ -196,14 +196,14 @@ public class ControladorUsuario extends HttpServlet {
                 String contraseñaEncriptada = Encriptar.encriptar(contrasena);
 
                 try {
-                    TypedQuery<Usuarios> q = em.createNamedQuery("Usuarios.findByEmail", Usuarios.class);
+                    TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
                     q.setParameter("correo", correo);
-                    List<Usuarios> lu = q.getResultList();
+                    List<Usuario> lu = q.getResultList();
 
                     //comprobar si no esta vacio y si la contraseña coincide (no compruebo el correo porque ya lo hago arriba)
                     if (!lu.isEmpty() && lu.get(0).getContrasena().equals(contraseñaEncriptada)) {
 
-                        Usuarios usuarioLogueado = lu.get(0);
+                        Usuario usuarioLogueado = lu.get(0);
                         request.getSession().setAttribute("usuarioLogueado", usuarioLogueado);
 
                         //compruebo si es admin
@@ -275,7 +275,7 @@ public class ControladorUsuario extends HttpServlet {
                     }
                 }
 
-                response.sendRedirect("/miapp/usuarios");
+                response.sendRedirect("/miapp/inicio");
                 
                 //esto se hace para que no haga el forward
                 //return;
@@ -293,7 +293,7 @@ public class ControladorUsuario extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public void guardarUsuario(Usuarios u) {
+    public void guardarUsuario(Usuario u) {
         Long id = u.getId();
         try {
             utx.begin();
@@ -315,7 +315,7 @@ public class ControladorUsuario extends HttpServlet {
         try {
             utx.begin();
 
-            Usuarios u = em.find(Usuarios.class, id);
+            Usuario u = em.find(Usuario.class, id);
 
             if (u != null) {
                 em.remove(u); // La operación de borrado de JPA

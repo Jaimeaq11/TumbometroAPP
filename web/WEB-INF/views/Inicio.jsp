@@ -13,7 +13,7 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
 
-                <img src="/miapp/imagenes/negro.jpg" class="d-block w-100 arreglar1" height="1500" width="2250"></img>
+                <img src="/miapp/imagenes/carrousel/negro.jpg" class="d-block w-100 arreglar1" height="1500" width="2250"></img>
 
                 <div class="container">
                     <div class="carousel-caption text-start">
@@ -25,7 +25,7 @@
             </div>
             <div class="carousel-item">
 
-                <img src="/miapp/imagenes/viaje.jpg" class="d-block w-100 arreglar2" height="100" width="150"></img>
+                <img src="/miapp/imagenes/carrousel/viaje.jpg" class="d-block w-100 arreglar2" height="100" width="150"></img>
 
                 <div class="container">
                     <div class="carousel-caption">
@@ -42,7 +42,7 @@
             </div>
             <div class="carousel-item">
 
-                <img src="/miapp/imagenes/grupo.jpg" class="d-block w-100 arreglar3" height="1500" width="2250"></img>
+                <img src="/miapp/imagenes/carrousel/grupo.jpg" class="d-block w-100 arreglar3" height="1500" width="2250"></img>
 
                 <div class="container">
                     <div class="carousel-caption text-end">
@@ -66,7 +66,7 @@
     <div class="container marketing">
         <div class="row">
             <div class="col-lg-4">
-                <img src="imagenes/casco.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
+                <img src="imagenes/carrousel/casco.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
                 <h2 class="fw-normal mt-3 mb-3">Tu perfil de motero</h2>
                 <p class="mb-4">Sube tu foto de perfil, escribe tu biografía y deja que la comunidad conozca al motero detrás del casco.</p>
                 <a href="/miapp/inicio" class="elboton mx-auto" role="button">
@@ -74,7 +74,7 @@
                 </a>
             </div>
             <div class="col-lg-4">
-                <img src="imagenes/moto.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
+                <img src="imagenes/carrousel/moto.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
                 <h2 class="fw-normal mt-3 mb-3">El garaje virtual</h2>
                 <p class="mb-4">Añade los detalles de tu moto a tu perfil. Desde el modelo hasta el color, tu máquina es la protagonista</p>
                 <a href="/miapp/inicio" class="elboton mx-auto" role="button">
@@ -82,7 +82,7 @@
                 </a>
             </div>
             <div class="col-lg-4">
-                <img src="imagenes/carretera.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
+                <img src="imagenes/carrousel/carretera.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
                 <h2 class="fw-normal mt-3 mb-3">Explora y descubre</h2>
                 <p class="mb-4">Filtra las rutas de la comunidad por marca de moto, dificultad o kilómetros para planear tu próxima salida.</p>
                 <a href="/miapp/inicio" class="elboton mx-auto" role="button">

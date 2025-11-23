@@ -1,6 +1,6 @@
 package daw.controllers;
 
-import daw.model.Usuarios;
+import daw.model.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.Filter;
@@ -39,7 +39,7 @@ public class Filtro implements Filter {
                     try {
                         Long usuarioId = Long.parseLong(c.getValue());
                         
-                        Usuarios usuario = em.find(Usuarios.class, usuarioId);
+                        Usuario usuario = em.find(Usuario.class, usuarioId);
                         if (usuario != null) {
                             req.getSession().setAttribute("usuarioLogueado", usuario);
                         }

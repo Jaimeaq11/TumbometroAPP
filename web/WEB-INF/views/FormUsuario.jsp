@@ -10,11 +10,12 @@
             <c:set var="accion" value="editar" />
         </c:if>
 
-        
+
         <form id="formulario" class="formulariousuarios" action="/miapp/usuario/${accion}" method="POST" enctype="multipart/form-data">
 
             <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
-            
+
+            <!-- titulo -->
             <c:if test="${!empty requestScope.usuarioEditado}">
                 <h3 class="titulo mt-4 mb-3">Editar perfil</h3>
             </c:if>
@@ -22,6 +23,7 @@
                 <h3 class="titulo mt-4 mb-3">Registrar usuario</h3>
             </c:if>
 
+            <!-- nombre y email -->
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
@@ -49,7 +51,7 @@
                 <input class="form-control" type="file" id="formFile" name="rutaFoto">
             </div>-->
 
-
+            <!-- biografia -->
             <div class="form-floating mb-3">
                 <textarea class="form-control" id="campobiografia" placeholder="" name="biografia" required style="height: 120px; resize: none;" maxlength="100"><c:out value='${requestScope.usuarioEditado.biografia}' /></textarea>
                 <label for="campobiografia">Biografía</label>
@@ -59,6 +61,7 @@
                 </div>
             </div>
 
+            <!-- contraseña -->
             <c:if test="${empty requestScope.usuarioEditado}">
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control" id="campocontrasena" placeholder="" name="contrasena" required>
@@ -75,6 +78,7 @@
                     </div>
                 </c:if>
 
+                <!-- selector marca y modelo -->
                 <div class="row g-3 mb-3"> 
                     <div class="col-md-6">
                         <select class="form-select mb-3" aria-label="" id="selectorMarca" name="marca">
@@ -105,6 +109,8 @@
                     </div>
                 </div>
             </c:if>
+
+            <!-- boton  -->
             <c:if test="${!empty requestScope.usuarioEditado}">
                 <button type="submit" class="btn btn-primary w-100 py-2 mb-5">Guardar cambios</button>
             </c:if>
@@ -118,7 +124,7 @@
 
             <form action="/miapp/usuario/eliminar-cuenta" method="POST">
                 <input type="hidden" name="id" value="${requestScope.usuarioEditado.id}">
-                <button type="submit" class="btn btn-danger d-block mx-auto w-100 mb-4 mt-4 mt-3 py-2" onclick="return confirm('¿Estás seguro de que quieres borrar este usuario?');">Eliminar cuenta</button>
+                <button type="submit" class="btn btn-danger d-block mx-auto w-100 mb-4 mt-4 mt-3 py-2" onclick="return confirm('¿Estás seguro de que quieres borrar tu cuenta?');">Eliminar cuenta</button>
             </form>
         </c:if>
     </main>
