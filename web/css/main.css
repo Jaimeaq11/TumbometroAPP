@@ -18,6 +18,14 @@ body {
     flex: 1 0 auto;
 }
 
+.lafoto {
+    transition: transform 0.2s ease;
+}
+
+.lafoto:hover {
+    transform: scale(1.1);
+}
+
 footer {
     flex-shrink: 0;
 }
@@ -48,7 +56,7 @@ footer {
 .dificultad-media {
     color: yellow;
 }
-
+    
 .dificultad-dificil {
     color: red;
 }

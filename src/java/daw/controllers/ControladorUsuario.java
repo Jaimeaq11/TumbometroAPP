@@ -105,7 +105,6 @@ public class ControladorUsuario extends HttpServlet {
                 String correo = request.getParameter("correo");
                 String contrasena = request.getParameter("contrasena");
                 String contraseñaEncriptada = Encriptar.encriptar(contrasena);
-                //String rutaFoto = request.getParameter("rutaFoto");
                 String biografia = request.getParameter("biografia");
                 String marca = request.getParameter("marca");
                 String modelo = request.getParameter("modelo");
@@ -131,10 +130,6 @@ public class ControladorUsuario extends HttpServlet {
                             Moto moto = new Moto(marca, modelo);
                             ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
 
-                            //como no se lo que contiene lo pongo a ""
-                            /*if (rutaFoto.isEmpty()) {
-                            rutaFoto = "";
-                        }*/
                             Usuario u = new Usuario(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
                             guardarUsuario(u);
                             response.sendRedirect("/miapp/inicio");
@@ -153,7 +148,6 @@ public class ControladorUsuario extends HttpServlet {
                 //los campos "name" del formUsuario:
                 String nombre = request.getParameter("nombre");
                 String correo = request.getParameter("correo");
-                //String rutaFoto = request.getParameter("rutaFoto");
                 String biografia = request.getParameter("biografia");
 
                 try {
@@ -173,7 +167,6 @@ public class ControladorUsuario extends HttpServlet {
                         usuarioLogueado.setNombre(nombre);
                         usuarioLogueado.setCorreo(correo);
                         usuarioLogueado.setBiografia(biografia);
-                        //usuarioLogueado.setRutaFoto(rutaFoto);
 
                         guardarUsuario(usuarioLogueado);
 
@@ -237,7 +230,7 @@ public class ControladorUsuario extends HttpServlet {
             }
 
             case "/eliminar-usuario" -> {
-                String idParam = request.getParameter("id");
+                String idParam = request.getParameter("idUsuario");
 
                 if (idParam != null) {
                     try {
@@ -253,13 +246,13 @@ public class ControladorUsuario extends HttpServlet {
                 }
 
                 response.sendRedirect("/miapp/usuarios");
-                
+
                 //esto se hace para que no haga el forward
                 //return;
             }
-            
+
             case "/eliminar-cuenta" -> {
-                String idParam = request.getParameter("id");
+                String idParam = request.getParameter("idUsuario");
 
                 if (idParam != null) {
                     try {
@@ -276,7 +269,7 @@ public class ControladorUsuario extends HttpServlet {
                 }
 
                 response.sendRedirect("/miapp/inicio");
-                
+
                 //esto se hace para que no haga el forward
                 //return;
             }
@@ -312,6 +305,7 @@ public class ControladorUsuario extends HttpServlet {
     }
 
     public void eliminarUsuario(Long id) {
+
         try {
             utx.begin();
 

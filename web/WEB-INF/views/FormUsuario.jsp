@@ -5,9 +5,9 @@
     <main class="formulariousuarios w-100 m-auto">
 
         <!-- logica para comprobar si es editar o registrar -->
-        <c:set var="accion" value="registrar" />
+        <c:set var="accion" value="registrar-usuario" />
         <c:if test="${!empty requestScope.usuarioEditado}">
-            <c:set var="accion" value="editar" />
+            <c:set var="accion" value="editar-usuario" />
         </c:if>
 
 
@@ -123,7 +123,7 @@
             <h3 class="mt-5 mb-3 titulo text-danger">¡Zona de peligro!</h3>
 
             <form action="/miapp/usuario/eliminar-cuenta" method="POST">
-                <input type="hidden" name="id" value="${requestScope.usuarioEditado.id}">
+                <input type="hidden" name="idUsuario" value="${requestScope.usuarioEditado.id}">
                 <button type="submit" class="btn btn-danger d-block mx-auto w-100 mb-4 mt-4 mt-3 py-2" onclick="return confirm('¿Estás seguro de que quieres borrar tu cuenta?');">Eliminar cuenta</button>
             </form>
         </c:if>

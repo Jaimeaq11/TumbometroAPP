@@ -31,16 +31,16 @@ public class ControladorRutasPublicas extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            List<Ruta> rutasPublicas = em.createQuery("SELECT r FROM Ruta r", Ruta.class).getResultList();
+            List<Ruta> rutasPublicas = em.createNamedQuery("Ruta.findByUserNull", Ruta.class).getResultList();
             request.setAttribute("rutas", rutasPublicas);
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Rutas.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace(); // ← ESTA LÍNEA ES CRÍTICA
-            System.out.println("ERROR DETALLADO eeeeeeeeeeeeeeeeeeeeeeeee: " + e.getMessage());
-            
+            e.printStackTrace();
+            System.out.println("ERROR DETALLADO: " + e.getMessage());
+
             request.setAttribute("msg", "Error al cargar las rutas.");
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
             rd.forward(request, response);
@@ -74,6 +74,29 @@ public class ControladorRutasPublicas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        /*String vista = "MisRutas";
+        String accion;
+
+        //por alguna razon no comprobaba lo de getservletpath pero no me acuerdo de por que lo quité
+        if (request.getPathInfo() != null) {
+            accion = request.getPathInfo();
+        } else {
+            accion = "/rutas";
+        }
+
+        switch (accion) {
+
+            case "/rutas" -> {
+                vista = "Rutas";
+            }
+
+            default -> {
+                vista = "Error";
+            }
+        }
+
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
+        rd.forward(request, response);*/
     }
 
     @Override

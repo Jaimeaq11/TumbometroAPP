@@ -7,10 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+
+@NamedQueries({
+    @NamedQuery(name = "Ruta.findAll", query = "SELECT r FROM Ruta r"),
+    //esta es para seleccionar las rutas cuyo dueño sea null
+    @NamedQuery(name = "Ruta.findByUserNull", query = "SELECT r FROM Ruta r WHERE r.usuarioid IS NULL"),
+})
 
 @Entity
 public class Ruta implements Serializable {
@@ -26,7 +34,7 @@ public class Ruta implements Serializable {
     private double distancia;
     private double tiempo;
     private String dificultad;
-    private String tipoCarretera; //offroad, costa, montaña...    
+    private String tipoRuta; //offroad, costa, montaña...    
     private String rutaFoto;
 
     //@ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +44,22 @@ public class Ruta implements Serializable {
     @JoinColumn(name = "usuarioid", nullable = true) // <-- Le dice a la BBDD que acepte NULL
     private Usuario usuarioid;
 
+    //SIN EL CONSTRUCTOR VACIO NO LANZA LA APLICACION (no se por que)
+    public Ruta() {
+    }
+
+    public Ruta(String nombre, String descripcion, double distancia, double tiempo, String dificultad, String tipoRuta, String rutaFoto, Usuario usuarioid) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.distancia = distancia;
+        this.tiempo = tiempo;
+        this.dificultad = dificultad;
+        this.tipoRuta = tipoRuta;
+        this.rutaFoto = rutaFoto;
+        this.usuarioid = usuarioid;
+    }
+
+    
     public Long getId() {
         return id;
     }
@@ -84,12 +108,12 @@ public class Ruta implements Serializable {
         this.dificultad = dificultad;
     }
 
-    public String getTipoCarretera() {
-        return tipoCarretera;
+    public String getTipoRuta() {
+        return tipoRuta;
     }
 
-    public void setTipoCarretera(String tipoCarretera) {
-        this.tipoCarretera = tipoCarretera;
+    public void setTipoRuta(String tipoRuta) {
+        this.tipoRuta = tipoRuta;
     }
 
     public Usuario getUsuarioid() {

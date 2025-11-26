@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.UserTransaction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet(name = "ControladorRutas", urlPatterns = {"/mis-rutas", "/mis-rutas/*"})
@@ -64,12 +65,24 @@ public class ControladorRutas extends HttpServlet {
                 }
             }
 
-            case "/nueva-ruta" -> {
+            case "/añadir-ruta" -> {
                 vista = "FormRutas";
             }
 
             case "/editar-ruta" -> {
-                vista = "FormRutas";
+                try {
+                    String idParam = request.getParameter("idRuta");
+                    Long id = Long.parseLong(idParam);
+
+                    Ruta rutaEditada = em.find(Ruta.class, id);
+
+                    request.setAttribute("rutaEditada", rutaEditada);
+                    vista = "FormRutas";
+
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error al cargar la ruta para editar.");
+                    vista = "Error";
+                }
             }
 
             default -> {
@@ -89,42 +102,24 @@ public class ControladorRutas extends HttpServlet {
 
         switch (accion) {
 
-            /*case "/nueva-ruta" -> {
+            case "/añadir-ruta" -> {
+                
                 //los campos "name" del formUsuario:
                 String nombre = request.getParameter("nombre");
-                String correo = request.getParameter("correo");
-                String contrasena = request.getParameter("contrasena");
-                String biografia = request.getParameter("biografia");
-                String marca = request.getParameter("marca");
-                String modelo = request.getParameter("modelo");
+                String descripcion = request.getParameter("descripcion");
+                double tiempo = Double.parseDouble(request.getParameter("tiempo"));
+                double distancia = Double.parseDouble(request.getParameter("distancia"));
+                String dificultad = request.getParameter("dificultad");
+                String tipoRuta = request.getParameter("tipoRuta");
 
                 try {
-                    if (marca == null || modelo == null || marca.isEmpty() || modelo.isEmpty()) {
-                        request.setAttribute("faltaVehiculo", "Debes registrar un vehículo");
-                        vista = "FormUsuario";
-                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-                        rd.forward(request, response);
-                    } else {
+                    String rutaFoto = "";
 
-                        TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
-                        q.setParameter("correo", correo);
-                        List<Usuario> lu = q.getResultList();
+                    Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
 
-                        if (!lu.isEmpty()) {
-                            request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                            vista = "FormUsuario";
-                            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-                            rd.forward(request, response);
-                        } else {
-                            Moto moto = new Moto(marca, modelo);
-                            ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
-
-                            
-                            Usuario u = new Usuario(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
-                            guardarUsuario(u);
-                            response.sendRedirect("/miapp/inicio");
-                        }
-                    }
+                    Ruta ruta = new Ruta(nombre, descripcion, distancia, tiempo, dificultad, tipoRuta, rutaFoto, usuarioLogueado);
+                    guardarRuta(ruta);
+                    response.sendRedirect("/miapp/mis-rutas");
 
                 } catch (Exception e) {
                     request.setAttribute("msg", "Error: datos no válidos");
@@ -132,10 +127,58 @@ public class ControladorRutas extends HttpServlet {
                     rd.forward(request, response);
                 }
             }
-            
-            case "/editar" -> {
-                vista = "FormRutas";
-            }*/
+
+            case "/editar-ruta" -> {
+
+                String nombre = request.getParameter("nombre");
+                String descripcion = request.getParameter("descripcion");
+                double tiempo = Double.parseDouble(request.getParameter("tiempo"));
+                double distancia = Double.parseDouble(request.getParameter("distancia"));
+                String dificultad = request.getParameter("dificultad");
+                String tipoRuta = request.getParameter("tipoRuta");
+                
+                try {
+                    String idParam = request.getParameter("idRuta");
+                    Long idRuta = Long.parseLong(idParam);
+                    Ruta rutaEditada = em.find(Ruta.class, idRuta);
+
+                    rutaEditada.setNombre(nombre);
+                    rutaEditada.setDescripcion(descripcion);
+                    rutaEditada.setTiempo(tiempo);
+                    rutaEditada.setDistancia(distancia);
+                    rutaEditada.setDificultad(dificultad);
+                    rutaEditada.setTipoRuta(tipoRuta);
+
+                    guardarRuta(rutaEditada);
+
+                    response.sendRedirect("/miapp/mis-rutas");
+                    return;
+
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error: datos no válidos en editar");
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                    rd.forward(request, response);
+                }
+            }
+
+            case "/eliminar-ruta" -> {
+                String idParam = request.getParameter("idRuta");
+
+                if (idParam != null) {
+                    try {
+                        Long id = Long.parseLong(idParam);
+                        eliminarRuta(id);
+
+                    } catch (Exception e) {
+                        request.setAttribute("msg", "Error: datos no válidos");
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                        rd.forward(request, response);
+                    }
+                }
+
+                response.sendRedirect("/miapp/mis-rutas");
+                return;
+            }
         }
     }
 
@@ -143,4 +186,44 @@ public class ControladorRutas extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    public void guardarRuta(Ruta r) {
+
+        Long id = r.getId();
+        try {
+            utx.begin();
+            if (id == null) {
+                em.persist(r);
+                Log.log(Level.INFO, "Nueva Ruta Registrado");
+            } else {
+                Log.log(Level.INFO, "Ruta {0} actualizado", id);
+                em.merge(r);
+            }
+            utx.commit();
+        } catch (Exception e) {
+            Log.log(Level.SEVERE, "excepción capturada", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void eliminarRuta(Long id) {
+
+        try {
+            utx.begin();
+
+            Ruta r = em.find(Ruta.class, id);
+
+            if (r != null) {
+                em.remove(r); // La operación de borrado de JPA
+                Log.log(Level.INFO, "Ruta {0} eliminado", id);
+            } else {
+                Log.log(Level.WARNING, "Intento de eliminar ID {0} que no existe.", id);
+            }
+
+            utx.commit();
+        } catch (Exception e) {
+            Log.log(Level.SEVERE, "Excepción capturada al eliminar", e);
+            throw new RuntimeException(e);
+        }
+    }
 }

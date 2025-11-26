@@ -5,13 +5,13 @@
     <main class="formulariorutas w-100 m-auto">
 
         <!-- logica para comprobar si es editar o nueva -->
-        <c:set var="accion" value="nueva-ruta" />
+        <c:set var="accion" value="añadir-ruta" />
         <c:if test="${!empty requestScope.rutaEditada}">
             <c:set var="accion" value="editar-ruta" />
         </c:if>
 
 
-        <form id="formularioRutas" class="formulariorutas" action="/miapp/usuario/${accion}" method="POST">
+        <form id="formularioRutas" class="formulariorutas" action="/miapp/mis-rutas/${accion}" method="POST">
 
             <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
@@ -72,18 +72,23 @@
                 <!-- tipo de carretera -->
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <select class="form-select" id="campoTipoCarretera" name="tipoCarretera" required>
+                        <select class="form-select" id="campoTipoRuta" name="tipoRuta" required>
                             <option value="" disabled selected>Selecciona el tipo</option>
-                            <option value="Carretera" ${requestScope.rutaEditada.tipoCarretera == 'Carretera' ? 'selected' : ''}>Carretera</option>
-                            <option value="Montaña" ${requestScope.rutaEditada.tipoCarretera == 'Montaña' ? 'selected' : ''}>Montaña</option>
-                            <option value="Costa" ${requestScope.rutaEditada.tipoCarretera == 'Costa' ? 'selected' : ''}>Costa</option>
-                            <option value="Offroad" ${requestScope.rutaEditada.tipoCarretera == 'Offroad' ? 'selected' : ''}>Offroad</option>
-                            <option value="Urbana" ${requestScope.rutaEditada.tipoCarretera == 'Urbana' ? 'selected' : ''}>Urbana</option>
+                            <option value="Carretera" ${requestScope.rutaEditada.tipoRuta == 'Carretera' ? 'selected' : ''}>Carretera</option>
+                            <option value="Montaña" ${requestScope.rutaEditada.tipoRuta == 'Montaña' ? 'selected' : ''}>Montaña</option>
+                            <option value="Costa" ${requestScope.rutaEditada.tipoRuta == 'Costa' ? 'selected' : ''}>Costa</option>
+                            <option value="Offroad" ${requestScope.rutaEditada.tipoRuta == 'Offroad' ? 'selected' : ''}>Offroad</option>
+                            <option value="Urbana" ${requestScope.rutaEditada.tipoRuta == 'Urbana' ? 'selected' : ''}>Urbana</option>
                         </select>
-                        <label for="campoTipoCarretera">Tipo de Ruta</label>
+                        <label for="campoTipoRuta">Tipo de Ruta</label>
                     </div>
                 </div>
             </div>
+
+            <!-- para pasarselo al controlador (le pasamos el id de la ruta que estamos editando) -->            
+            <c:if test="${!empty requestScope.rutaEditada}">
+                <input type="hidden" name="idRuta" value="${requestScope.rutaEditada.id}">
+            </c:if>
 
             <button type="submit" class="btn btn-primary w-100 py-2 mb-5">
                 <c:if test="${!empty requestScope.rutaEditada}">Guardar Cambios</c:if>
@@ -92,13 +97,7 @@
 
             </form>
 
-
-        <c:if test="${!empty requestScope.rutaEditada}">
-            <h3 class="mt-5 mb-3 titulo text-danger">¡Zona de peligro!</h3>
-            <a href="miapp/rutas/eliminar?id=${requestScope.rutaEditada.id}' />" class="btn btn-danger d-block mx-auto w-100 mb-4 mt-3 py-2" onclick="return confirm('¿Estás seguro de que quieres borrar esta ruta?');">Eliminar Ruta</a>
-        </c:if>
-
-    </main>
-</div>
+        </main>
+    </div>
 
 <%@include file="plantillas/footer.jspf" %>
