@@ -6,8 +6,15 @@
     <c:forEach var="ruta" items="${requestScope.rutas}" >
 
         <div class="col">
-            <div class="card me-2 ms-2">
-                <img src="${ruta.rutaFoto}" class="card-img-top"></img>
+            <div class="card me-2 ms-2" style="border-radius: 20px;">
+
+                <c:if test="${empty ruta.rutaFoto}">
+                    <img src="imagenes/rutas/sin_fondo.png" class="card-img-top lafoto">
+                </c:if>
+                <c:if test="${!empty ruta.rutaFoto}">
+                    <img src="${ruta.rutaFoto}" class="card-img-top lafoto" style="border-radius: 20px;">
+                </c:if>
+                    
                 <div class="card-body">
                     <h6 class="display-6 card-title">${ruta.nombre}</h6>
                     <p class="card-text">${ruta.descripcion}</p>
@@ -15,7 +22,7 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><b>Distancia: </b>${ruta.distancia} km</li>
                     <li class="list-group-item"><b>Tiempo: </b>${ruta.tiempo} h</li>
-                    <li class="list-group-item"><b>Tipo de ruta: </b>${ruta.tipoCarretera}</li>
+                    <li class="list-group-item"><b>Tipo de ruta: </b>${ruta.tipoRuta}</li>
                     <li class="list-group-item"><b>Dificultad: </b>
                         <c:choose>
                             <c:when test="${ruta.dificultad == 'Fácil'}">
@@ -32,13 +39,13 @@
                 </ul>
 
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    
-                        <c:if test="${empty ruta.usuarioid}">
-                            <span class="display-6" style="color: #3399ff; font-size: 17px;">Sistema</span>
-                        </c:if>
-                        <c:if test="${!empty ruta.usuarioid}">
-                            <span class="fs-5 display-6">${ruta.usuarioid.nombre}</span>
-                        </c:if>
+
+                    <c:if test="${empty ruta.usuarioid}">
+                        <span class="display-6" style="color: #cccccc; font-size: 17px;">Sistema</span>
+                    </c:if>
+                    <c:if test="${!empty ruta.usuarioid}">
+                        <span class="fs-5 display-6" style="color: #3399ff;">${ruta.usuarioid.nombre}</span>
+                    </c:if>
 
                 </div>
             </div>

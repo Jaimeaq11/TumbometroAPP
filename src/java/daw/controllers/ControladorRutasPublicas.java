@@ -31,7 +31,7 @@ public class ControladorRutasPublicas extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            List<Ruta> rutasPublicas = em.createNamedQuery("Ruta.findByUserNull", Ruta.class).getResultList();
+            List<Ruta> rutasPublicas = em.createNamedQuery("Ruta.findPublicas", Ruta.class).getResultList();
             request.setAttribute("rutas", rutasPublicas);
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Rutas.jsp");

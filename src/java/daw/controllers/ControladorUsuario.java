@@ -274,6 +274,33 @@ public class ControladorUsuario extends HttpServlet {
                 //return;
             }
 
+            case "/check-email" -> {
+                response.setContentType("text/html;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+
+                String correo = request.getParameter("correo");
+                String respuesta;
+
+                try {
+                    TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
+                    q.setParameter("correo", correo);
+                    List<Usuario> lu = q.getResultList();
+
+                    if (!lu.isEmpty()) {
+                        respuesta = "DUPLICADO";
+                    } else {
+                        respuesta = "OK";
+                    }
+                } catch (Exception e) {
+                    Log.severe("Error comprobando email: " + e.getMessage());
+                    respuesta = "Error en el servidor";
+                }
+                
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(respuesta);
+                }
+            }
+
             default -> {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
                 rd.forward(request, response);

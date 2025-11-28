@@ -18,6 +18,8 @@ import java.util.Date;
     @NamedQuery(name = "Ruta.findAll", query = "SELECT r FROM Ruta r"),
     //esta es para seleccionar las rutas cuyo dueño sea null
     @NamedQuery(name = "Ruta.findByUserNull", query = "SELECT r FROM Ruta r WHERE r.usuarioid IS NULL"),
+    //esta es para seleccionar solo las rutas publicas
+    @NamedQuery(name = "Ruta.findPublicas", query = "SELECT r FROM Ruta r WHERE r.publica = true"),
 })
 
 @Entity
@@ -36,6 +38,7 @@ public class Ruta implements Serializable {
     private String dificultad;
     private String tipoRuta; //offroad, costa, montaña...    
     private String rutaFoto;
+    private boolean publica;
 
     //@ManyToOne(fetch = FetchType.LAZY)
     
@@ -48,7 +51,7 @@ public class Ruta implements Serializable {
     public Ruta() {
     }
 
-    public Ruta(String nombre, String descripcion, double distancia, double tiempo, String dificultad, String tipoRuta, String rutaFoto, Usuario usuarioid) {
+    public Ruta(String nombre, String descripcion, double distancia, double tiempo, String dificultad, String tipoRuta, String rutaFoto, boolean publica, Usuario usuarioid) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.distancia = distancia;
@@ -56,6 +59,7 @@ public class Ruta implements Serializable {
         this.dificultad = dificultad;
         this.tipoRuta = tipoRuta;
         this.rutaFoto = rutaFoto;
+        this.publica = publica;
         this.usuarioid = usuarioid;
     }
 
@@ -130,6 +134,14 @@ public class Ruta implements Serializable {
 
     public void setRutaFoto(String rutaFoto) {
         this.rutaFoto = rutaFoto;
+    }
+    
+    public boolean isPublica() {
+        return publica;
+    }
+
+    public void setPublica(boolean publica) {
+        this.publica = publica;
     }
     
     

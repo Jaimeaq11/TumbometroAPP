@@ -10,8 +10,7 @@
             <c:set var="accion" value="editar-usuario" />
         </c:if>
 
-
-        <form id="formulario" class="formulariousuarios" action="/miapp/usuario/${accion}" method="POST" enctype="multipart/form-data">
+        <form id="formularioUsuarios" class="formulariousuarios" action="/miapp/usuario/${accion}" method="POST" enctype="multipart/form-data">
 
             <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
@@ -27,23 +26,19 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input value="<c:out value='${requestScope.usuarioEditado.nombre}' />" type="text" class="form-control" id="camponombre" placeholder="" name="nombre" required>
+                        <input value="<c:out value='${requestScope.usuarioEditado.nombre}' />" type="text" class="form-control" id="camponombre" placeholder="" name="nombre">
                         <label for="camponombre">Nombre</label>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input value="<c:out value='${requestScope.usuarioEditado.correo}' />" type="email" class="form-control" id="campoemail" placeholder="" aria-describedby="emailHelp" name="correo" required>
-                        <label for="campoemail">Correo</label>
+                        <input value="<c:out value='${requestScope.usuarioEditado.correo}' />" type="email" class="form-control" id="campocorreo" placeholder="" name="correo">
+                        <label for="campocorreo">Correo</label>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
             </div>
-
-            <c:if test="${!empty requestScope.errorEmail}">
-                <div class="alert alert-danger" role="alert">
-                    ${requestScope.errorEmail}
-                </div>
-            </c:if>
 
 
             <!--<div class="mb-3">
@@ -53,8 +48,9 @@
 
             <!-- biografia -->
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="campobiografia" placeholder="" name="biografia" required style="height: 120px; resize: none;" maxlength="100"><c:out value='${requestScope.usuarioEditado.biografia}' /></textarea>
+                <textarea class="form-control" id="campobiografia" placeholder="" name="biografia" style="height: 120px; resize: none;" maxlength="100"><c:out value='${requestScope.usuarioEditado.biografia}' /></textarea>
                 <label for="campobiografia">Biografía</label>
+                <div class="invalid-feedback"></div>
 
                 <div class="position-absolute bottom-0 end-0 p-2 text-muted small" id="contador-bio">
                     0/100
@@ -64,19 +60,14 @@
             <!-- contraseña -->
             <c:if test="${empty requestScope.usuarioEditado}">
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="campocontrasena" placeholder="" name="contrasena" required>
+                    <input type="password" class="form-control" id="campocontrasena" placeholder="" name="contrasena">
                     <label for="campocontrasena"">Contraseña</label>
+                    <div class="invalid-feedback"></div>
                 </div>
             </c:if>
 
             <c:if test="${empty requestScope.usuarioEditado}">
                 <h3 class="mt-5 mb-3">Registrar vehículo</h3>
-
-                <c:if test="${!empty requestScope.faltaVehiculo}">
-                    <div class="alert alert-danger" role="alert">
-                        ${requestScope.faltaVehiculo}
-                    </div>
-                </c:if>
 
                 <!-- selector marca y modelo -->
                 <div class="row g-3 mb-3"> 
@@ -100,12 +91,14 @@
                             <option value="Voge">Voge</option>
                             <option value="MV Agusta">MV Agusta</option>
                         </select>
+                        <div class="invalid-feedback"></div>
                     </div>
 
                     <div class="col-md-6">
                         <select class="form-select mb-3" aria-label="" id="selectorModelo" name="modelo" disabled>
                             <option value="" selected disabled>Elige un modelo</option>
                         </select>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
             </c:if>

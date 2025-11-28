@@ -18,11 +18,11 @@ body {
     flex: 1 0 auto;
 }
 
-.lafoto {
+.ellogo {
     transition: transform 0.2s ease;
 }
 
-.lafoto:hover {
+.ellogo:hover {
     transform: scale(1.1);
 }
 
@@ -48,15 +48,42 @@ footer {
     margin-top: 200px;
 }
 
+.publicar {
+    transition: transform 0.2s ease-out, stroke 0.2s ease;
+    stroke: #146ef0;
+}
+
+/* para cuando pase el raton por encima del boton, entonces el svg hace lo que haya dentro */
+.boton-publicar:hover .publicar {
+    transform: translateY(-6px);
+    stroke: white;
+}
+
 /*para el color de la dificultad*/
 .dificultad-facil {
-    color: green;
+    color: #00ff00;
 }
 
 .dificultad-media {
     color: yellow;
 }
-    
+
 .dificultad-dificil {
     color: red;
+}
+
+.lafoto {
+    height: 200px; /* Altura fija para todas */
+    object-fit: cover; /* Recorta la imagen para llenar el espacio */
+    object-position: center; /* Enfoca la parte central de la imagen */
+    width: 100%; /* Ancho completo del card */
+}
+
+
+.error {
+    background-color: #660000;
+    border-radius: 40px;
+    width: 700px;
+    align-content: center;
+    box-shadow: 6px 6px 10px 10px black
 }

@@ -25,31 +25,35 @@
 
             <!-- nombre -->
             <div class="form-floating mb-3">
-                <input value="<c:out value='${requestScope.rutaEditada.nombre}' />" type="text" class="form-control" id="camponombre" placeholder="Nombre" name="nombre" required>
+                <input value="<c:out value='${requestScope.rutaEditada.nombre}' />" type="text" class="form-control" id="camponombre" placeholder="Nombre" name="nombre">
                 <label for="camponombre">Nombre de la Ruta</label>
+                <div class="invalid-feedback"></div>
             </div>
 
             <!-- descripcion -->
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="campobiografia" placeholder="Descripción" name="descripcion" required style="height: 100px"><c:out value='${requestScope.rutaEditada.descripcion}' /></textarea>
-                <label for="campobiografia">Descripción</label>
+                <textarea maxlength="100" class="form-control" id="campodescripcion" placeholder="Descripción" name="descripcion" style="height: 100px"><c:out value='${requestScope.rutaEditada.descripcion}' /></textarea>
+                <label for="campodescripcion">Descripción</label>
                 <div class="position-absolute bottom-0 end-0 p-2 text-muted small" id="contador-bio">
                     0/100
                 </div>
+                <div class="invalid-feedback"></div>
             </div>
 
             <!-- tiempo y distancia -->
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input value="<c:out value='${requestScope.rutaEditada.distancia}' />" type="number" step="0.1" class="form-control" id="campodistancia" name="distancia" required>
+                        <input value="<c:out value='${requestScope.rutaEditada.distancia}' />" type="number" step="0.1" class="form-control" id="campodistancia" name="distancia">
                         <label for="campodistancia">Distancia (km)</label>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input value="<c:out value='${requestScope.rutaEditada.tiempo}' />" type="number" step="1" class="form-control" id="campotiempo" name="tiempo" required>
+                        <input value="<c:out value='${requestScope.rutaEditada.tiempo}' />" type="number" step="1" class="form-control" id="campotiempo" name="tiempo">
                         <label for="campotiempo">Tiempo (min)</label>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
             </div>
@@ -59,30 +63,38 @@
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <select class="form-select" id="campodificultad" name="dificultad" required>
-                            <option value="" disabled selected>Selecciona</option>
+                        <select class="form-select" id="campodificultad" name="dificultad">
+                            <option value="" selected>Selecciona</option>
                             <option value="Fácil" ${requestScope.rutaEditada.dificultad == 'Fácil' ? 'selected' : ''}>Fácil</option>
                             <option value="Media" ${requestScope.rutaEditada.dificultad == 'Media' ? 'selected' : ''}>Media</option>
                             <option value="Difícil" ${requestScope.rutaEditada.dificultad == 'Difícil' ? 'selected' : ''}>Difícil</option>
                         </select>
                         <label for="campodificultad">Dificultad</label>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
 
                 <!-- tipo de carretera -->
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <select class="form-select" id="campoTipoRuta" name="tipoRuta" required>
-                            <option value="" disabled selected>Selecciona el tipo</option>
+                        <select class="form-select" id="campotiporuta" name="tiporuta">
+                            <option value="" selected>Selecciona el tipo</option>
                             <option value="Carretera" ${requestScope.rutaEditada.tipoRuta == 'Carretera' ? 'selected' : ''}>Carretera</option>
                             <option value="Montaña" ${requestScope.rutaEditada.tipoRuta == 'Montaña' ? 'selected' : ''}>Montaña</option>
                             <option value="Costa" ${requestScope.rutaEditada.tipoRuta == 'Costa' ? 'selected' : ''}>Costa</option>
                             <option value="Offroad" ${requestScope.rutaEditada.tipoRuta == 'Offroad' ? 'selected' : ''}>Offroad</option>
                             <option value="Urbana" ${requestScope.rutaEditada.tipoRuta == 'Urbana' ? 'selected' : ''}>Urbana</option>
                         </select>
-                        <label for="campoTipoRuta">Tipo de Ruta</label>
+                        <label for="campotiporuta">Tipo de Ruta</label>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
+            </div>
+
+            <!-- foto -->
+            <div class="mb-3">
+                <label for="campofoto" class="form-label">Foto de la ruta</label>
+                <input class="form-control" type="file" id="campofoto" name="rutaFoto" accept="image/*" onchange="previewImage(event)">
             </div>
 
             <!-- para pasarselo al controlador (le pasamos el id de la ruta que estamos editando) -->            

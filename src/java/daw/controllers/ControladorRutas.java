@@ -48,20 +48,27 @@ public class ControladorRutas extends HttpServlet {
         switch (accion) {
 
             case "/mis-rutas" -> {
-                vista = "MisRutas"; //asumimos con algun valor para que no de error
-                try {
-                    Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-                    Usuario usuario = em.find(Usuario.class, usuarioLogueado.getId());
-                    List<Ruta> misRutas = usuario.getRutas();
 
-                    if (misRutas.isEmpty()) {
-                        request.setAttribute("msg", "No hay rutas.");
-                    } else {
-                        request.setAttribute("misRutas", misRutas);
+                //solo accedemos si tenemos el login (proteccion de rutas)
+                Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+                if (usuarioLogueado != null) {
+                    vista = "MisRutas"; //asumimos con algun valor para que no de error
+                    try {
+                        Usuario usuario = em.find(Usuario.class, usuarioLogueado.getId());
+                        List<Ruta> misRutas = usuario.getRutas();
+
+                        if (misRutas.isEmpty()) {
+                            request.setAttribute("msg", "No hay rutas.");
+                        } else {
+                            request.setAttribute("misRutas", misRutas);
+                        }
+
+                    } catch (Exception e) {
+                        request.setAttribute("msg", "Error al cargar tus rutas.");
                     }
-
-                } catch (Exception e) {
-                    request.setAttribute("msg", "Error al cargar tus rutas.");
+                } else {
+                    request.setAttribute("msg", "NO TIENES ACCESO.");
+                    vista = "Error";
                 }
             }
 
@@ -103,21 +110,21 @@ public class ControladorRutas extends HttpServlet {
         switch (accion) {
 
             case "/añadir-ruta" -> {
-                
-                //los campos "name" del formUsuario:
-                String nombre = request.getParameter("nombre");
-                String descripcion = request.getParameter("descripcion");
-                double tiempo = Double.parseDouble(request.getParameter("tiempo"));
-                double distancia = Double.parseDouble(request.getParameter("distancia"));
-                String dificultad = request.getParameter("dificultad");
-                String tipoRuta = request.getParameter("tipoRuta");
 
                 try {
+                    //los campos "name" del formRutas:
+                    String nombre = request.getParameter("nombre");
+                    String descripcion = request.getParameter("descripcion");
+                    double tiempo = Double.parseDouble(request.getParameter("tiempo"));
+                    double distancia = Double.parseDouble(request.getParameter("distancia"));
+                    String dificultad = request.getParameter("dificultad");
+                    String tipoRuta = request.getParameter("tiporuta");
+
                     String rutaFoto = "";
 
                     Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
 
-                    Ruta ruta = new Ruta(nombre, descripcion, distancia, tiempo, dificultad, tipoRuta, rutaFoto, usuarioLogueado);
+                    Ruta ruta = new Ruta(nombre, descripcion, distancia, tiempo, dificultad, tipoRuta, rutaFoto, false, usuarioLogueado);
                     guardarRuta(ruta);
                     response.sendRedirect("/miapp/mis-rutas");
 
@@ -130,16 +137,15 @@ public class ControladorRutas extends HttpServlet {
 
             case "/editar-ruta" -> {
 
-                String nombre = request.getParameter("nombre");
-                String descripcion = request.getParameter("descripcion");
-                double tiempo = Double.parseDouble(request.getParameter("tiempo"));
-                double distancia = Double.parseDouble(request.getParameter("distancia"));
-                String dificultad = request.getParameter("dificultad");
-                String tipoRuta = request.getParameter("tipoRuta");
-                
                 try {
-                    String idParam = request.getParameter("idRuta");
-                    Long idRuta = Long.parseLong(idParam);
+                    String nombre = request.getParameter("nombre");
+                    String descripcion = request.getParameter("descripcion");
+                    double tiempo = Double.parseDouble(request.getParameter("tiempo"));
+                    double distancia = Double.parseDouble(request.getParameter("distancia"));
+                    String dificultad = request.getParameter("dificultad");
+                    String tipoRuta = request.getParameter("tiporuta");
+
+                    long idRuta = Long.parseLong(request.getParameter("idRuta"));
                     Ruta rutaEditada = em.find(Ruta.class, idRuta);
 
                     rutaEditada.setNombre(nombre);
@@ -162,22 +168,37 @@ public class ControladorRutas extends HttpServlet {
             }
 
             case "/eliminar-ruta" -> {
-                String idParam = request.getParameter("idRuta");
+                long idRuta = Long.parseLong(request.getParameter("idRuta"));
 
-                if (idParam != null) {
-                    try {
-                        Long id = Long.parseLong(idParam);
-                        eliminarRuta(id);
+                try {
+                    eliminarRuta(idRuta);
 
-                    } catch (Exception e) {
-                        request.setAttribute("msg", "Error: datos no válidos");
-                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
-                        rd.forward(request, response);
-                    }
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error: datos no válidos");
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                    rd.forward(request, response);
                 }
 
                 response.sendRedirect("/miapp/mis-rutas");
                 return;
+            }
+
+            case "/publicar-ruta" -> {
+
+                try {
+                    Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+                    Long idRuta = Long.parseLong(request.getParameter("idRuta"));
+
+                    Ruta ruta = em.find(Ruta.class, idRuta);
+
+                    ruta.setPublica(true);
+                    guardarRuta(ruta);
+
+                    response.sendRedirect("/miapp/mis-rutas");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
             }
         }
     }
