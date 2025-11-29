@@ -10,7 +10,7 @@
         <c:forEach var="ruta" items="${requestScope.misRutas}" >
 
             <div class="col">
-                <div class="card me-2 ms-2 ${ruta.publica ? 'border-primary' : ''}" style="border-radius: 20px;">
+                <div class="tarjeta card me-2 ms-2 ${ruta.publica ? 'border-primary' : ''}">
                     <img src="${ruta.rutaFoto}" class="card-img-top"></img>
                     <div class="card-body">
 

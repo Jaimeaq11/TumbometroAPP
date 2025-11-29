@@ -12,6 +12,11 @@
 
         <form id="formularioUsuarios" class="formulariousuarios" action="/miapp/usuario/${accion}" method="POST" enctype="multipart/form-data">
 
+            <!-- esto es para pasarle al id al controlador de editar, porque si no lo hago voy a tener el problema de que cuando quiera editar el usuario no me va a dejar introducir el mismo correo que antes tenía por la validacion del fetch, pero le pasamos el id al controlador para poder alli comprobar que si es mi propio email que me permita ponerlo-->
+            <c:if test="${!empty requestScope.usuarioEditado}">
+                <input type="hidden" id="idUsuarioOculto" value="${requestScope.usuarioEditado.id}">
+            </c:if>
+
             <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
             <!-- titulo -->
@@ -41,10 +46,10 @@
             </div>
 
 
-            <!--<div class="mb-3">
-                <label for="formFile" class="form-label">Foto de perfil (Opcional)</label>
-                <input class="form-control" type="file" id="formFile" name="rutaFoto">
-            </div>-->
+            <div class="mb-3">
+                <label for="campofoto" class="form-label">Foto de perfil</label>
+                <input class="form-control" type="file" id="campofoto" name="foto" accept="image/*">
+            </div>
 
             <!-- biografia -->
             <div class="form-floating mb-3">
@@ -115,7 +120,7 @@
         <c:if test="${!empty requestScope.usuarioEditado}">
             <h3 class="mt-5 mb-3 titulo text-danger">¡Zona de peligro!</h3>
 
-            <form action="/miapp/usuario/eliminar-cuenta" method="POST">
+            <form action="/miapp/usuario/eliminar-usuario" method="POST">
                 <input type="hidden" name="idUsuario" value="${requestScope.usuarioEditado.id}">
                 <button type="submit" class="btn btn-danger d-block mx-auto w-100 mb-4 mt-4 mt-3 py-2" onclick="return confirm('¿Estás seguro de que quieres borrar tu cuenta?');">Eliminar cuenta</button>
             </form>

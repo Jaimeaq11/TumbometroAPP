@@ -48,6 +48,10 @@ footer {
     margin-top: 200px;
 }
 
+.boton-publicar {
+    box-shadow: 6px 6px 14px 1px black;
+}
+
 .publicar {
     transition: transform 0.2s ease-out, stroke 0.2s ease;
     stroke: #146ef0;
@@ -85,5 +89,19 @@ footer {
     border-radius: 40px;
     width: 700px;
     align-content: center;
-    box-shadow: 6px 6px 10px 10px black
+    box-shadow: 6px 6px 10px 10px black;
+}
+
+.card {
+    border-radius: 20px;
+    box-shadow: 4px 4px 10px 1px black;
+    transition: transform 0.1s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.015);
+}
+
+.btn {
+    border-radius: 12px;
 }

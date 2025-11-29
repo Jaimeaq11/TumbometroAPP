@@ -10,8 +10,8 @@
             <c:set var="accion" value="editar-ruta" />
         </c:if>
 
-
-        <form id="formularioRutas" class="formulariorutas" action="/miapp/mis-rutas/${accion}" method="POST">
+        
+        <form id="formularioRutas" class="formulariorutas" action="/miapp/mis-rutas/${accion}" method="POST" enctype="multipart/form-data">
 
             <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
 
@@ -94,7 +94,7 @@
             <!-- foto -->
             <div class="mb-3">
                 <label for="campofoto" class="form-label">Foto de la ruta</label>
-                <input class="form-control" type="file" id="campofoto" name="rutaFoto" accept="image/*" onchange="previewImage(event)">
+                <input class="form-control" type="file" id="campofoto" name="foto" accept="image/*">
             </div>
 
             <!-- para pasarselo al controlador (le pasamos el id de la ruta que estamos editando) -->            

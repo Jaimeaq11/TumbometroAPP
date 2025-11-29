@@ -45,58 +45,12 @@ public class ControladorRutasPublicas extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
             rd.forward(request, response);
         }
-
-        /*String vista = "MisRutas";
-        String accion;
-        
-        //por alguna razon no comprobaba lo de getservletpath pero no me acuerdo de por que lo quité
-        if (request.getPathInfo() != null) {
-            accion = request.getPathInfo();
-        } else {
-            accion = "/rutas";
-        }
-
-        switch (accion) {
-            
-             case "/rutas" -> {
-                vista = "Rutas";
-            }
-
-            default -> {
-                vista = "Error";
-            }
-        }
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-        rd.forward(request, response);*/
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        /*String vista = "MisRutas";
-        String accion;
-
-        //por alguna razon no comprobaba lo de getservletpath pero no me acuerdo de por que lo quité
-        if (request.getPathInfo() != null) {
-            accion = request.getPathInfo();
-        } else {
-            accion = "/rutas";
-        }
-
-        switch (accion) {
-
-            case "/rutas" -> {
-                vista = "Rutas";
-            }
-
-            default -> {
-                vista = "Error";
-            }
-        }
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-        rd.forward(request, response);*/
+        
     }
 
     @Override

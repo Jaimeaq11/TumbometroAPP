@@ -47,33 +47,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function validarCorreoFetch(entrada) {
-            let datos = new URLSearchParams('correo=' + entrada.value);
-            
-            try {
-                let response = await fetch("/miapp/usuario/check-email", { 
-                    method: 'POST',
-                    body: datos
-                });
+        
+        let datos = new URLSearchParams();
+        datos.append('correo', entrada.value);
 
-                if (response.ok) {
-                    const data = await response.text();
-                    
-                    if (data.trim() === "DUPLICADO") {
-                        marcar(entrada, false, "Ese correo ya existe!");
-                        return false;
-                    } else {
-                        marcar(entrada, true);
-                        return true;
-                    }
-                } else {
-                    console.log("Error en la petición AJAX");
+        const idOculto = document.getElementById("idUsuarioOculto");
+        if (idOculto) {
+            datos.append('idOculto', idOculto.value);
+        }
+
+        try {
+            let response = await fetch("/miapp/usuario/check-email", {
+                method: 'POST',
+                body: datos
+            });
+
+            if (response.ok) {
+                const data = await response.text();
+
+                if (data.trim() === "DUPLICADO") {
+                    marcar(entrada, false, "Ese correo ya existe!");
                     return false;
+                } else {
+                    marcar(entrada, true);
+                    return true;
                 }
-            } catch (error) {
-                console.log("Error de conexión: " + error);
+            } else {
+                console.log("Error en la petición AJAX");
                 return false;
             }
+        } catch (error) {
+            console.log("Error de conexión: " + error);
+            return false;
         }
+    }
 
     const formularioUsuarios = document.getElementById("formularioUsuarios");
     if (formularioUsuarios) {
@@ -116,12 +123,12 @@ document.addEventListener('DOMContentLoaded', function () {
         function validarCorreo(entrada, mensajeFormato) {
             if (!entrada)
                 return true;
-            
+
             if (entrada.value.trim() === "") {
                 marcar(entrada, false, "El correo es obligatorio.");
                 return false;
             }
-            
+
             const correoPatron = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!correoPatron.test(entrada.value.trim())) {
                 marcar(entrada, false, mensajeFormato);
@@ -206,15 +213,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     const claveError = this.id.replace('campo', '').replace('selector', '').toLowerCase();
 
                     if (this.type === 'email') {
-                        
+
                         const formatoValido = validarCorreo(this, mensajesErrorUsuarios[claveError]);
                         if (formatoValido) {
                             validarCorreoFetch(this);
                         }
-                        
+
                     } else if (this.type === 'select-one') {
                         validarSelect(this, mensajesErrorUsuarios[claveError]);
-                        
+
                     } else {
                         validarSimple(this, mensajesErrorUsuarios[claveError]);
                     }

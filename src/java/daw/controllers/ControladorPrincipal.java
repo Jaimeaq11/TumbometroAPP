@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 
 @WebServlet(name = "ControladorPrincipal", urlPatterns = {
     "/inicio",
-    "/precios",
     "/iniciar-sesion"})
 
 public class ControladorPrincipal extends HttpServlet {
@@ -45,10 +44,6 @@ public class ControladorPrincipal extends HttpServlet {
             //iniciar-sesion va en este controlador porque no depende de ningun usuario
             case "/iniciar-sesion" -> {
                 vista = "IniciarSesion";
-            }
-            
-            case "/precios" -> {
-                vista = "Precios";
             }
             
             default -> {
