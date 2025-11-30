@@ -10,8 +10,9 @@
         <c:forEach var="ruta" items="${requestScope.misRutas}" >
 
             <div class="col">
-                <div class="tarjeta card me-2 ms-2 ${ruta.publica ? 'border-primary' : ''}">
-                    <img src="${ruta.rutaFoto}" class="card-img-top"></img>
+                <div class="tarjeta card me-2 ms-2 ${ruta.publica ? 'border-primary border-3' : ''}">
+                    
+                    <img src="/miapp/imagenes/rutas/${ruta.nombreFoto}" class="card-img-top lafoto"></img>
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between align-items-center">
@@ -26,7 +27,12 @@
                                 </form>
                             </c:if>
                             <c:if test="${ruta.publica}">
-                                <p class="me-2" style=" color: #146ef0; font-size: 18px;">Publicada</p>
+                                <form action="/miapp/mis-rutas/retirar-ruta" class="position-absolute top-0 end-0 mt-3 me-3" method="POST">
+                                    <input type="hidden" name="idRuta" value="${ruta.id}">
+                                        <button title="Retirar" type="submit" class="btn btn-outline-danger rounded-circle boton-retirar" style="width: 50px; height: 50px;" onclick="return confirm('¿Estás seguro de que quieres retirar esta ruta?');">
+                                            <svg class="retirar" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5l5-5m-5-7v12"/></svg>
+                                        </button>
+                                </form>
                             </c:if>
                         </div>
 

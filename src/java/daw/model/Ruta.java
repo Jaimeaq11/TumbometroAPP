@@ -37,7 +37,7 @@ public class Ruta implements Serializable {
     private double tiempo;
     private String dificultad;
     private String tipoRuta; //offroad, costa, montaña...    
-    private String rutaFoto;
+    private String nombreFoto;
     private boolean publica;
 
     //@ManyToOne(fetch = FetchType.LAZY)
@@ -51,14 +51,14 @@ public class Ruta implements Serializable {
     public Ruta() {
     }
 
-    public Ruta(String nombre, String descripcion, double distancia, double tiempo, String dificultad, String tipoRuta, String rutaFoto, boolean publica, Usuario usuarioid) {
+    public Ruta(String nombre, String descripcion, double distancia, double tiempo, String dificultad, String tipoRuta, String nombreFoto, boolean publica, Usuario usuarioid) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.distancia = distancia;
         this.tiempo = tiempo;
         this.dificultad = dificultad;
         this.tipoRuta = tipoRuta;
-        this.rutaFoto = rutaFoto;
+        this.nombreFoto = nombreFoto;
         this.publica = publica;
         this.usuarioid = usuarioid;
     }
@@ -128,12 +128,12 @@ public class Ruta implements Serializable {
         this.usuarioid = usuarioid;
     }
 
-    public String getRutaFoto() {
-        return rutaFoto;
+    public String getNombreFoto() {
+        return nombreFoto;
     }
 
-    public void setRutaFoto(String rutaFoto) {
-        this.rutaFoto = rutaFoto;
+    public void setNombreFoto(String nombreFoto) {
+        this.nombreFoto = nombreFoto;
     }
     
     public boolean isPublica() {

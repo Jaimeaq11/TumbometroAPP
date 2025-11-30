@@ -35,7 +35,7 @@ public class Usuario implements Serializable {
     private String correo;
     private String biografia;
     private String contrasena;
-    //private String rutaFoto;
+    private String nombreFoto;
     private Moto moto;
     private String rol;
 
@@ -108,6 +108,14 @@ public class Usuario implements Serializable {
         return correo;
     }
 
+    public String getNombreFoto() {
+        return nombreFoto;
+    }
+
+    public void setNombreFoto(String nombreFoto) {
+        this.nombreFoto = nombreFoto;
+    }
+    
     public void setCorreo(String correo) {
         this.correo = correo;
     }

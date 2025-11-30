@@ -18,18 +18,28 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import jakarta.transaction.UserTransaction;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
 //no puedo poner usuario/* si quiero controlar mis-rutas en el otro controlador
 @WebServlet(name = "ControladorUsuario", urlPatterns = {"/usuarios", "/usuario/*"})
 
-@MultipartConfig
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15 // 15 MB
+)
+
 public class ControladorUsuario extends HttpServlet {
 
     @PersistenceContext(unitName = "ElTumbometroPU")
@@ -38,7 +48,6 @@ public class ControladorUsuario extends HttpServlet {
     private UserTransaction utx;
     private static final Logger Log = Logger.getLogger(ControladorUsuario.class.getName());
 
-    //private static final String directorio_url = "imagenes" + File.separator + "perfiles";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -53,11 +62,19 @@ public class ControladorUsuario extends HttpServlet {
 
         switch (accion) {
             case "/usuarios" -> {
-                List<Usuario> lu;
-                TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findAll", Usuario.class);
-                lu = q.getResultList();
-                request.setAttribute("listausuarios", lu);
-                vista = "Usuarios";
+                /*Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+                if (usuarioLogueado != null) {*/
+
+                    List<Usuario> lu;
+                    TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findAll", Usuario.class);
+                    lu = q.getResultList();
+                    request.setAttribute("listausuarios", lu);
+                    vista = "Usuarios";
+                    
+                /*} else {
+                    request.setAttribute("msg", "NO TIENES ACCESO.");
+                    vista = "Error";
+                }*/
             }
 
             case "/nuevo" -> {
@@ -107,55 +124,56 @@ public class ControladorUsuario extends HttpServlet {
 
             case "/registrar-usuario" -> {
 
-                //protegemos las rutas
-                Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-                if (usuarioLogueado != null) {
+                //los campos "name" del formUsuario:
+                String nombre = request.getParameter("nombre");
+                String correo = request.getParameter("correo");
+                String contrasena = request.getParameter("contrasena");
+                String contraseñaEncriptada = Encriptar.encriptar(contrasena);
+                String biografia = request.getParameter("biografia");
+                String marca = request.getParameter("marca");
+                String modelo = request.getParameter("modelo");
 
-                    //los campos "name" del formUsuario:
-                    String nombre = request.getParameter("nombre");
-                    String correo = request.getParameter("correo");
-                    String contrasena = request.getParameter("contrasena");
-                    String contraseñaEncriptada = Encriptar.encriptar(contrasena);
-                    String biografia = request.getParameter("biografia");
-                    String marca = request.getParameter("marca");
-                    String modelo = request.getParameter("modelo");
+                // esto evita el acceso desde fuera con valores nulos
+                if (nombre == null || nombre.trim().isEmpty() || correo == null || correo.trim().isEmpty() || contrasena == null || contrasena.trim().isEmpty() || marca == null || marca.trim().isEmpty() || modelo == null || modelo.trim().isEmpty()) {
+                    request.setAttribute("msg", "Error: No puedes enviar el formulario vacío.");
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/FormUsuario.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
 
-                    try {
-                        if (marca == null || modelo == null || marca.isEmpty() || modelo.isEmpty()) {
-                            request.setAttribute("faltaVehiculo", "Debes registrar un vehículo");
-                            vista = "FormUsuario";
-                            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-                            rd.forward(request, response);
-                        } else {
+                Part filePart = request.getPart("foto"); // Coincide con name="foto" del HTML
+                String nombreFoto = subirImagen(filePart, "perfiles"); // Guardará en /imagenes/perfiles/
 
-                            TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
-                            q.setParameter("correo", correo);
-                            List<Usuario> lu = q.getResultList();
+                // Si no subió foto, pon una por defecto o null
+                if (nombreFoto == null) {
+                    nombreFoto = "sin_foto.jpg";
+                }
+                try {
 
-                            if (!lu.isEmpty()) {
-                                request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
-                                vista = "FormUsuario";
-                                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
-                                rd.forward(request, response);
-                            } else {
-                                Moto moto = new Moto(marca, modelo);
-                                ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
+                    TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findByEmail", Usuario.class);
+                    q.setParameter("correo", correo);
+                    List<Usuario> lu = q.getResultList();
 
-                                Usuario u = new Usuario(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
-                                guardarUsuario(u);
-                                response.sendRedirect("/miapp/inicio");
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        request.setAttribute("msg", "Error: datos no válidos");
-                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                    if (!lu.isEmpty()) {
+                        request.setAttribute("errorEmail", "Ese correo ya está registrado. Por favor, usa otro.");
+                        vista = "FormUsuario";
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/" + vista + ".jsp");
                         rd.forward(request, response);
+                    } else {
+                        Moto moto = new Moto(marca, modelo);
+                        ArrayList<Ruta> rutas = new ArrayList<Ruta>(); //vacio
+
+                        Usuario u = new Usuario(nombre, correo, biografia, contraseñaEncriptada, moto, rutas, "usuario");
+                        u.setNombreFoto(nombreFoto);
+
+                        guardarUsuario(u);
+                        response.sendRedirect("/miapp/inicio");
                     }
 
-                } else {
-                    request.setAttribute("msg", "NO TIENES ACCESO.");
-                    vista = "Error";
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Error: datos no válidos");
+                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
+                    rd.forward(request, response);
                 }
             }
 
@@ -184,6 +202,13 @@ public class ControladorUsuario extends HttpServlet {
                             usuarioLogueado.setNombre(nombre);
                             usuarioLogueado.setCorreo(correo);
                             usuarioLogueado.setBiografia(biografia);
+
+                            Part filePart = request.getPart("foto");
+                            String nombreFotoNueva = subirImagen(filePart, "perfiles");
+
+                            if (nombreFotoNueva != null) {
+                                usuarioLogueado.setNombreFoto(nombreFotoNueva);
+                            }
 
                             guardarUsuario(usuarioLogueado);
 
@@ -265,15 +290,15 @@ public class ControladorUsuario extends HttpServlet {
 
                     String idParam = request.getParameter("idUsuario");
                     if (idParam != null) {
-                        
+
                         try {
                             Long id = Long.parseLong(idParam);
 
                             eliminarUsuario(id);
-                            
+
                             //si soy yo mismo me invalido la sesion
                             if (usuarioLogueado.getId().equals(id)) {
-                                
+
                                 request.getSession().invalidate();
                                 response.sendRedirect("/miapp/inicio");
                             } else {
@@ -384,6 +409,50 @@ public class ControladorUsuario extends HttpServlet {
         } catch (Exception e) {
             Log.log(Level.SEVERE, "Excepción capturada al eliminar", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private String subirImagen(Part part, String nombreCarpeta) {
+        try {
+            // 1. Validar que hay archivo
+            if (part == null || part.getSize() == 0) {
+                return null; // No subió nada
+            }
+
+            // 2. Obtener nombre original y extensión
+            String nombreOriginal = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+            String extension = "";
+            int i = nombreOriginal.lastIndexOf('.');
+            if (i > 0) {
+                extension = nombreOriginal.substring(i); // Ejemplo: .jpg, .png
+            }
+
+            // 3. Generar nombre ÚNICO (Evita que Pepe borre la foto de Juan)
+            String nombreUnico = UUID.randomUUID().toString() + extension;
+
+            // 4. Determinar ruta absoluta en el servidor
+            // OJO: Esto guarda en la carpeta de despliegue. Al recompilar se borran.
+            String rutaReal = getServletContext().getRealPath("/") + File.separator + "imagenes" + File.separator + nombreCarpeta;
+
+            System.out.println(">>> ESTOY GUARDANDO LA FOTO AQUÍ: " + rutaReal);
+
+            // Crear directorios si no existen
+            File directorio = new File(rutaReal);
+            if (!directorio.exists()) {
+                directorio.mkdirs();
+            }
+
+            // 5. Guardar el archivo
+            Path rutaDestino = Paths.get(rutaReal, nombreUnico);
+            try (java.io.InputStream input = part.getInputStream()) {
+                Files.copy(input, rutaDestino, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            return nombreUnico; // Devolvemos el nombre para guardarlo en la BBDD
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

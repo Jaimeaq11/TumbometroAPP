@@ -43,12 +43,15 @@
                                 </a>
                             </li>
 
-                            <li>
-                                <a href="/miapp/usuarios" class="nav-link px-4 text-white d-flex align-items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2m1-17.87a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-                                    <span class="ms-2">Usuarios registrados</span>
-                                </a>
-                            </li>
+                            <!-- AQUI VA LO DE COMPROBAR SI ES ADMIN (LO HE QUITADO POR COMODIDAD) -->
+                          
+                                <li>
+                                    <a href="/miapp/usuarios" class="nav-link px-4 text-white d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2m1-17.87a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+                                        <span class="ms-2">Usuarios registrados</span>
+                                    </a>
+                                </li>
+                            <!-- aqui termina -->
                         </ul>
 
                         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -67,7 +70,7 @@
                             <!-- Perfil -->
                             <div class="dropdown text-end">
                                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="me-2">${sessionScope.usuarioLogueado.nombre}</span>
+                                    <span class="me-2 fs-5">${sessionScope.usuarioLogueado.nombre}</span>
 
                                     <!-- Logo de perfil -->
                                     <c:if test="${!empty sessionScope.admin}">
@@ -75,7 +78,7 @@
                                     </c:if>
 
                                     <c:if test="${empty sessionScope.admin}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 448 512"><path fill="#cccccc" d="M224 256a128 128 0 1 0 0-256a128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7c0-98.5-79.8-178.3-178.3-178.3z"/></svg>
+                                        <img src="/miapp/imagenes/perfiles/${sessionScope.usuarioLogueado.nombreFoto}" height="35" width="35" class="rounded-circle object-fit-cover"></img>
                                     </c:if>
                                 </a>
 

@@ -48,21 +48,6 @@ footer {
     margin-top: 200px;
 }
 
-.boton-publicar {
-    box-shadow: 6px 6px 14px 1px black;
-}
-
-.publicar {
-    transition: transform 0.2s ease-out, stroke 0.2s ease;
-    stroke: #146ef0;
-}
-
-/* para cuando pase el raton por encima del boton, entonces el svg hace lo que haya dentro */
-.boton-publicar:hover .publicar {
-    transform: translateY(-6px);
-    stroke: white;
-}
-
 /*para el color de la dificultad*/
 .dificultad-facil {
     color: #00ff00;
@@ -81,6 +66,7 @@ footer {
     object-fit: cover; /* Recorta la imagen para llenar el espacio */
     object-position: center; /* Enfoca la parte central de la imagen */
     width: 100%; /* Ancho completo del card */
+    border-radius: 20px;
 }
 
 
@@ -100,8 +86,4 @@ footer {
 
 .card:hover {
     transform: scale(1.015);
-}
-
-.btn {
-    border-radius: 12px;
 }

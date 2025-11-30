@@ -10,7 +10,7 @@
             <c:set var="accion" value="editar-ruta" />
         </c:if>
 
-        
+
         <form id="formularioRutas" class="formulariorutas" action="/miapp/mis-rutas/${accion}" method="POST" enctype="multipart/form-data">
 
             <img class="d-block mx-auto mt-4" src="/miapp/imagenes/logo.png" alt="" width="120" height="120">
@@ -76,7 +76,7 @@
 
                 <!-- tipo de carretera -->
                 <div class="col-md-6">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating">
                         <select class="form-select" id="campotiporuta" name="tiporuta">
                             <option value="" selected>Selecciona el tipo</option>
                             <option value="Carretera" ${requestScope.rutaEditada.tipoRuta == 'Carretera' ? 'selected' : ''}>Carretera</option>
@@ -93,7 +93,7 @@
 
             <!-- foto -->
             <div class="mb-3">
-                <label for="campofoto" class="form-label">Foto de la ruta</label>
+                <label for="campofoto" class="form-label">Foto de la ruta (opcional)</label>
                 <input class="form-control" type="file" id="campofoto" name="foto" accept="image/*">
             </div>
 
@@ -102,7 +102,7 @@
                 <input type="hidden" name="idRuta" value="${requestScope.rutaEditada.id}">
             </c:if>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 mb-5">
+            <button type="submit" class="btn btn-primary w-100 py-2 mb-5 mt-3">
                 <c:if test="${!empty requestScope.rutaEditada}">Guardar Cambios</c:if>
                 <c:if test="${empty requestScope.rutaEditada}">Crear Ruta</c:if>
                 </button>

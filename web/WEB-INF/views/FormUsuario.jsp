@@ -47,7 +47,7 @@
 
 
             <div class="mb-3">
-                <label for="campofoto" class="form-label">Foto de perfil</label>
+                <label for="campofoto" class="form-label">Foto de perfil (opcional)</label>
                 <input class="form-control" type="file" id="campofoto" name="foto" accept="image/*">
             </div>
 

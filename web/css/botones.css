@@ -43,3 +43,47 @@
 .elboton:active {
     transform: scale(0.9);
 }
+
+.btn {
+    border-radius: 12px;
+}
+
+
+.boton-publicar {
+    box-shadow: 6px 6px 14px 1px black;
+    background-color: white;
+}
+
+.publicar {
+    transition: transform 0.2s ease-out, stroke 0.2s ease;
+    stroke: #146ef0;
+}
+
+/* para cuando pase el raton por encima del boton, entonces el svg hace lo que haya dentro */
+.boton-publicar:hover .publicar {
+    transform: translateY(-6px);
+    stroke: white;
+}
+
+.boton-retirar {
+    box-shadow: 6px 6px 14px 1px black;
+    background-color: white;
+}
+
+.retirar {
+    transition: transform 0.2s ease-out, stroke 0.2s ease;
+    stroke: #dc3545;
+}
+
+.boton-retirar:hover .retirar {
+    transform: translateY(6px);
+    stroke: white;
+}
+
+.basura {
+    stroke: #dc3545;
+}
+
+.boton-basura:hover .basura {
+    stroke: white;
+}
