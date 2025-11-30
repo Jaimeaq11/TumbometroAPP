@@ -31,11 +31,11 @@
                     <div class="carousel-caption">
                         <h1 style="color: white;">Tu diario de rutas.</h1>
                         <p class="opacity-100" style="color: #cccccc; font-size: 23px;">Con tu moto hasta el último kilómetro, guarda todos los detalles de tus aventuras.</p>
-                        <c:if test="${!empty requestScope.usuarioLogueado}">
-                            <p><a class="btn btn-lg btn-primary" href="/miapp/usuario/mis-rutas">Añadir nuevas rutas</a></p>
+                        <c:if test="${!empty sessionScope.usuarioLogueado}">
+                            <p><a class="btn btn-lg btn-primary" href="/miapp/mis-rutas">Añadir nuevas rutas</a></p>
                         </c:if>
-                        <c:if test="${empty requestScope.usuarioLogueado}">
-                            <p><a class="btn btn-lg btn-primary" href="/miapp/usuario/iniciar-sesion">Añadir nuevas rutas</a></p>
+                        <c:if test="${empty sessionScope.usuarioLogueado}">
+                            <p><a class="btn btn-lg btn-primary" href="/miapp/iniciar-sesion">Añadir nuevas rutas</a></p>
                         </c:if>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="carousel-caption text-end">
                         <h1 style="color: white;">Mejor con amigos.</h1>
                         <p class="opacity-100" style="color: #cccccc; font-size: 23px;">Descubre las rutas de otros usuarios y comparte tus experiencias con ellos.</p>
-                        <p><a class="btn btn-lg btn-primary" href="/miapp/usuarios">Ver usuarios activos</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="/miapp/rutas">Ver rutas comunitarias</a></p>
                     </div>
                 </div>
             </div>
@@ -69,25 +69,16 @@
                 <img src="imagenes/carrousel/casco.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
                 <h2 class="fw-normal mt-3 mb-3">Tu perfil de motero</h2>
                 <p class="mb-4">Sube tu foto de perfil, escribe tu biografía y deja que la comunidad conozca al motero detrás del casco.</p>
-                <a href="/miapp/inicio" class="elboton mx-auto" role="button">
-                    <span class="elspan">Ver detalles »</span>
-                </a>
             </div>
             <div class="col-lg-4">
                 <img src="imagenes/carrousel/moto.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
                 <h2 class="fw-normal mt-3 mb-3">El garaje virtual</h2>
                 <p class="mb-4">Añade los detalles de tu moto a tu perfil. Desde el modelo hasta el color, tu máquina es la protagonista</p>
-                <a href="/miapp/inicio" class="elboton mx-auto" role="button">
-                    <span class="elspan">Ver detalles »</span>
-                </a>
             </div>
             <div class="col-lg-4">
                 <img src="imagenes/carrousel/carretera.png" class="bd-placeholder-img rounded-circle" width="140" height="140">
                 <h2 class="fw-normal mt-3 mb-3">Explora y descubre</h2>
                 <p class="mb-4">Filtra las rutas de la comunidad por marca de moto, dificultad o kilómetros para planear tu próxima salida.</p>
-                <a href="/miapp/inicio" class="elboton mx-auto" role="button">
-                    <span class="elspan">Ver detalles »</span>
-                </a>
             </div>
         </div>
 

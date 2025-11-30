@@ -3,6 +3,10 @@
 
 <h3 class="titulo mt-4 mb-3">Rutas de la comunidad</h3>
 
+<!--<form class="buscador mb-4" role="search">
+    <input type="search" class="form-control" placeholder="Buscar por título..." aria-label="Search">
+</form>-->
+
 <div class="row row-cols-1 row-cols-md-4 g-4 me-4 ms-4">
 
     <c:forEach var="ruta" items="${requestScope.rutas}" >
@@ -42,14 +46,35 @@
 
                 <div class="card-body">
 
-                    <c:if test="${empty ruta.usuarioid}">
-                        <span class="display-6" style="color: #cccccc; font-size: 17px;">Sistema</span>
-                    </c:if>
 
-                    <c:if test="${!empty ruta.usuarioid}">
-                        <span class="fs-5 display-6" style="color: #3399ff;">${ruta.usuarioid.nombre}</span>
-                        <img src="/miapp/imagenes/perfiles/${ruta.usuarioid.nombreFoto}" height="30" width="30" class="rounded-circle"></img>
-                    </c:if>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <c:if test="${empty ruta.usuarioid}">
+                                <span class="display-6" style="color: #cccccc; font-size: 17px;">Sistema</span>
+                            </c:if>
+
+                            <c:if test="${!empty ruta.usuarioid}">
+                                <span class="fs-5 display-6" style="color: #3399ff;">${ruta.usuarioid.nombre}</span>
+                                <img src="/miapp/imagenes/perfiles/${ruta.usuarioid.nombreFoto}" height="30" width="30" class="rounded-circle"></img>
+                            </c:if>
+                        </div>
+
+                        <div class="col-md-6 text-end">
+                            <c:if test="${!empty sessionScope.admin}">
+                                <form action="/miapp/rutas/eliminar-ruta" method="POST" style="display: inline;">
+                                    <input type="hidden" name="idRuta" value="${ruta.id}">
+                                    <button type="submit" class="boton-basura btn btn-outline-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres borrar esta ruta?');">
+                                        <svg class="basura" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>
+                                    </button>
+                                </form>
+                            </c:if>
+
+                            <c:if test="${empty sessionScope.admin}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="#cccccc" d="M20 8h-5.612l1.123-3.367c.202-.608.1-1.282-.275-1.802S14.253 2 13.612 2H12c-.297 0-.578.132-.769.36L6.531 8H4c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h13.307a2.01 2.01 0 0 0 1.873-1.298l2.757-7.351A1 1 0 0 0 22 12v-2c0-1.103-.897-2-2-2M4 10h2v9H4zm16 1.819L17.307 19H8V9.362L12.468 4h1.146l-1.562 4.683A.998.998 0 0 0 13 10h7z"/></svg>
+                            </c:if>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
