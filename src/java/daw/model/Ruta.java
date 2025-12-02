@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -40,7 +41,11 @@ public class Ruta implements Serializable {
     private String nombreFoto;
     private boolean publica;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
+    private int likes;
+    private String listaDeIDs;
+    
+    @Transient //esto significa que no lo meta en la bd, solo en java
+    private boolean yaLeDiLike;
     
     //esto es para que el id usuario de una ruta pueda ser null
     @ManyToOne(optional = true) // <-- 'true' permite que sea null
@@ -143,7 +148,30 @@ public class Ruta implements Serializable {
     public void setPublica(boolean publica) {
         this.publica = publica;
     }
-    
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public String getListaDeIDs() {
+        return listaDeIDs;
+    }
+
+    public void setListaDeIDs(String listaDeIDs) {
+        this.listaDeIDs = listaDeIDs;
+    }
+
+    public boolean isYaLeDiLike() {
+        return yaLeDiLike;
+    }
+
+    public void setYaLeDiLike(boolean yaLeDiLike) {
+        this.yaLeDiLike = yaLeDiLike;
+    }
     
     @Override
     public int hashCode() {

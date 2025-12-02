@@ -81,8 +81,6 @@
                             <option value="" selected>Selecciona el tipo</option>
                             <option value="Carretera" ${requestScope.rutaEditada.tipoRuta == 'Carretera' ? 'selected' : ''}>Carretera</option>
                             <option value="Montaña" ${requestScope.rutaEditada.tipoRuta == 'Montaña' ? 'selected' : ''}>Montaña</option>
-                            <option value="Costa" ${requestScope.rutaEditada.tipoRuta == 'Costa' ? 'selected' : ''}>Costa</option>
-                            <option value="Offroad" ${requestScope.rutaEditada.tipoRuta == 'Offroad' ? 'selected' : ''}>Offroad</option>
                             <option value="Urbana" ${requestScope.rutaEditada.tipoRuta == 'Urbana' ? 'selected' : ''}>Urbana</option>
                         </select>
                         <label for="campotiporuta">Tipo de Ruta</label>

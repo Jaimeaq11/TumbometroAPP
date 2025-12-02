@@ -62,7 +62,7 @@ footer {
 }
 
 .lafoto {
-    height: 200px; /* Altura fija para todas */
+    height: 350px; /* Altura fija para todas */
     object-fit: cover; /* Recorta la imagen para llenar el espacio */
     object-position: center; /* Enfoca la parte central de la imagen */
     width: 100%; /* Ancho completo del card */
@@ -84,11 +84,20 @@ footer {
     transition: transform 0.1s ease-in-out;
 }
 
-.card:hover {
+/*.card:hover {
     transform: scale(1.015);
-}
+}*/
 
 .buscador {
     max-width: 250px;
     margin: 0 auto;
+}
+
+.cerrar-sesion {
+    transition: all 0.2s ease;
+}
+
+.cerrar-sesion:hover {
+    background-color: #dc3545;
+    color: white;
 }

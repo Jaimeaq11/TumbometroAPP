@@ -33,6 +33,24 @@ public class ControladorRutasPublicas extends HttpServlet {
 
         try {
             List<Ruta> rutasPublicas = em.createNamedQuery("Ruta.findPublicas", Ruta.class).getResultList();
+
+            //logica de los likes
+            Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+            if (usuarioLogueado != null) {
+
+                String miID = "," + usuarioLogueado.getId() + ",";
+
+                for (int i = 0; i < rutasPublicas.size(); i++) {
+                    Ruta r = rutasPublicas.get(i);
+
+                    if (r.getListaDeIDs() != null && r.getListaDeIDs().contains(miID)) {
+                        r.setYaLeDiLike(true);
+                    } else {
+                        r.setYaLeDiLike(false);
+                    }
+                }
+            }
+
             request.setAttribute("rutas", rutasPublicas);
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Rutas.jsp");
@@ -40,7 +58,7 @@ public class ControladorRutasPublicas extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("ERROR DETALLADO: " + e.getMessage());
+            System.out.println("ERROR DETALLADO: " + e.getMessage()); //importante para debugs
 
             request.setAttribute("msg", "Error al cargar las rutas.");
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/Error.jsp");
@@ -78,6 +96,72 @@ public class ControladorRutasPublicas extends HttpServlet {
                     vista = "Error";
                 }
             }
+
+            case "/like" -> {
+
+                Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+                if (usuarioLogueado != null) {
+
+                    try {
+                        Long idRuta = Long.parseLong(request.getParameter("idRuta"));
+                        Ruta ruta = em.find(Ruta.class, idRuta);
+
+                        like(ruta, usuarioLogueado);
+
+                        String miId = "," + usuarioLogueado.getId() + ",";
+                        boolean isLiked = ruta.getListaDeIDs().contains(miId);
+
+                        String respuesta = ruta.getLikes() + ":" + isLiked;
+
+                        response.setContentType("text/plain");
+                        response.getWriter().write(respuesta);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public void like(Ruta r, Usuario u) {
+        try {
+            utx.begin();
+
+            String lista = r.getListaDeIDs();
+            String miID = "," + u.getId() + ",";
+
+            if (lista == null) {
+                lista = ",";
+            }
+
+            if (lista.contains(miID)) {
+                // reemplazamos el ,miId, por ,
+                lista = lista.replace(miID, ",");
+                r.setLikes(r.getLikes() - 1);
+            } else {
+                //añadimos una , al final porque la anterior la pone la cadena anterior
+                lista = lista + u.getId() + ",";
+                r.setLikes(r.getLikes() + 1);
+            }
+
+            if (r.getLikes() < 0) {
+                r.setLikes(0);
+            }
+
+            r.setListaDeIDs(lista);
+
+            Log.info(lista);
+
+            em.merge(r);
+            utx.commit();
+
+        } catch (Exception e) {
+            try {
+                utx.rollback();
+            } catch (Exception ex) {
+            }
+            e.printStackTrace();
         }
     }
 

@@ -62,19 +62,20 @@ public class ControladorUsuario extends HttpServlet {
 
         switch (accion) {
             case "/usuarios" -> {
-                /*Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-                if (usuarioLogueado != null) {*/
-
+                //solo el admin puede acceder aquí
+                Boolean esAdmin = (Boolean) request.getSession().getAttribute("admin");
+                
+                if (esAdmin != null && esAdmin) {
                     List<Usuario> lu;
                     TypedQuery<Usuario> q = em.createNamedQuery("Usuario.findAll", Usuario.class);
                     lu = q.getResultList();
                     request.setAttribute("listausuarios", lu);
                     vista = "Usuarios";
-                    
-                /*} else {
-                    request.setAttribute("msg", "NO TIENES ACCESO.");
+
+                } else {
+                    request.setAttribute("msg", "NO ERES ADMINISTRADOR, FUERA.");
                     vista = "Error";
-                }*/
+                }
             }
 
             case "/nuevo" -> {
@@ -398,11 +399,20 @@ public class ControladorUsuario extends HttpServlet {
 
             Usuario u = em.find(Usuario.class, id);
 
+            //borramos todas sus rutas en el caso de que tenga
             if (u != null) {
-                em.remove(u); // La operación de borrado de JPA
-                Log.log(Level.INFO, "Usuario {0} eliminado", id);
-            } else {
-                Log.log(Level.WARNING, "Intento de eliminar ID {0} que no existe.", id);
+                List<Ruta> susRutas = u.getRutas();
+
+                if (susRutas != null && !susRutas.isEmpty()) {
+                    // Usamos una copia de la lista para evitar errores al borrar mientras recorremos
+                    for (Ruta r : susRutas) {
+                        em.remove(r);
+                    }
+                }
+
+                em.remove(u);
+
+                Log.log(Level.INFO, "Usuario {0} y todas sus rutas eliminados", id);
             }
 
             utx.commit();

@@ -90,3 +90,10 @@
 
 
 /*boton de like de rutas*/
+.like {
+    transition: transform 0.2s ease;
+}
+
+.like:hover {
+    transform: scale(1.2);
+}
