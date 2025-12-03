@@ -90,10 +90,99 @@
 
 
 /*boton de like de rutas*/
-.like {
+/*.like {
     transition: transform 0.2s ease;
 }
 
 .like:hover {
     transform: scale(1.2);
+}
+
+.like:active {
+    transform: scale(0.9);
+}*/
+
+/* Contenedor del botón */
+.like-button {
+    position: relative;
+    display: inline-flex;
+    height: 40px;
+    width: 100px; /* Un poco más ancho para que quepan los números */
+    border-radius: 16px;
+    background-color: #1d1d1d;
+    overflow: hidden; /* CLAVE: Lo que se salga del cuadro no se ve */
+    vertical-align: middle;
+}
+
+.like-button .on {
+    display: none;
+}
+
+/* Parte izquierda (Icono) */
+.like {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10; /* Para que esté por encima */
+}
+
+.like-icon {
+    width: 24px;
+    height: 24px;
+    fill: #999999;
+    transition: fill 0.3s ease;
+}
+
+/* --- ZONA DE NÚMEROS (DERECHA) --- */
+.like-count-container {
+    position: absolute;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    border-left: 1px solid #3a3a3a;
+}
+
+/* Estilo base de los números */
+.like-count {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #999999;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s; /* Efecto rebote suave */
+}
+
+/* POSICIONES INICIALES (Sin Like) */
+.like-count.one {
+    transform: translateY(0); /* Visible */
+}
+
+.like-count.two {
+    transform: translateY(100%); /* Escondido abajo */
+}
+
+/* --- ESTADOS ACTIVOS (:CHECKED) --- */
+
+/* Corazón Azul */
+.on:checked + .like .like-icon {
+    fill: #0d6efd;
+    animation: latido 0.3s forwards;
+}
+
+/* Animación Números al dar Like */
+/* El 1 sube y desaparece */
+.on:checked ~ .like-count-container .one {
+    transform: translateY(-100%);
+}
+/* El 2 sube y aparece */
+.on:checked ~ .like-count-container .two {
+    transform: translateY(0);
+    color: #fff; /* Se ilumina */
 }

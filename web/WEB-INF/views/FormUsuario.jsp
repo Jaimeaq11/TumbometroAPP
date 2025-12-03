@@ -31,14 +31,14 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input value="<c:out value='${requestScope.usuarioEditado.nombre}' />" type="text" class="form-control" id="camponombre" placeholder="" name="nombre">
+                        <input value="${requestScope.usuarioEditado.nombre}" type="text" class="form-control" id="camponombre" placeholder="" name="nombre">
                         <label for="camponombre">Nombre</label>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input value="<c:out value='${requestScope.usuarioEditado.correo}' />" type="email" class="form-control" id="campocorreo" placeholder="" name="correo">
+                        <input value="${requestScope.usuarioEditado.correo}" type="email" class="form-control" id="campocorreo" placeholder="" name="correo">
                         <label for="campocorreo">Correo</label>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -53,7 +53,7 @@
 
             <!-- biografia -->
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="campobiografia" placeholder="" name="biografia" style="height: 120px; resize: none;" maxlength="100"><c:out value='${requestScope.usuarioEditado.biografia}' /></textarea>
+                <textarea class="form-control" id="campobiografia" placeholder="" name="biografia" style="height: 120px; resize: none;" maxlength="100">${requestScope.usuarioEditado.biografia}</textarea>
                 <label for="campobiografia">Biografía</label>
                 <div class="invalid-feedback"></div>
 

@@ -25,14 +25,14 @@
 
             <!-- nombre -->
             <div class="form-floating mb-3">
-                <input value="<c:out value='${requestScope.rutaEditada.nombre}' />" type="text" class="form-control" id="camponombre" placeholder="Nombre" name="nombre">
+                <input value="${requestScope.rutaEditada.nombre}" type="text" class="form-control" id="camponombre" placeholder="Nombre" name="nombre">
                 <label for="camponombre">Nombre de la Ruta</label>
                 <div class="invalid-feedback"></div>
             </div>
 
             <!-- descripcion -->
             <div class="form-floating mb-3">
-                <textarea maxlength="100" class="form-control" id="campodescripcion" placeholder="Descripción" name="descripcion" style="height: 100px"><c:out value='${requestScope.rutaEditada.descripcion}' /></textarea>
+                <textarea maxlength="100" class="form-control" id="campodescripcion" placeholder="Descripción" name="descripcion" style="height: 100px">${requestScope.rutaEditada.descripcion}</textarea>
                 <label for="campodescripcion">Descripción</label>
                 <div class="position-absolute bottom-0 end-0 p-2 text-muted small" id="contador-bio">
                     0/100
@@ -44,22 +44,21 @@
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input value="<c:out value='${requestScope.rutaEditada.distancia}' />" type="number" step="0.1" class="form-control" id="campodistancia" name="distancia">
+                        <input value="${requestScope.rutaEditada.distancia}" type="number" step="0.1" class="form-control" id="campodistancia" name="distancia">
                         <label for="campodistancia">Distancia (km)</label>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-floating">
-                        <input value="<c:out value='${requestScope.rutaEditada.tiempo}' />" type="number" step="1" class="form-control" id="campotiempo" name="tiempo">
-                        <label for="campotiempo">Tiempo (min)</label>
+                    <div class="form-floating mb-3">
+                        <input type="time" class="form-control" id="campotiempo" name="tiempo" placeholder="Tiempo" value="${requestScope.rutaEditada.tiempoFormateado}">
+                        <label for="campotiempo">Duración (Horas:Minutos)</label>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
             </div>
 
             <!-- dificultad  -->
-
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
                     <div class="form-floating">

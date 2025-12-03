@@ -42,7 +42,8 @@ public class ControladorRutasPublicas extends HttpServlet {
 
                 for (int i = 0; i < rutasPublicas.size(); i++) {
                     Ruta r = rutasPublicas.get(i);
-
+                    
+                    //la comprobacion es para comprobar si por primera vez tiene que pintar el boton azul o gris (por una ejecucion anterior)
                     if (r.getListaDeIDs() != null && r.getListaDeIDs().contains(miID)) {
                         r.setYaLeDiLike(true);
                     } else {

@@ -146,13 +146,20 @@ public class ControladorRutas extends HttpServlet {
                         //los campos "name" del formRutas:
                         String nombre = request.getParameter("nombre");
                         String descripcion = request.getParameter("descripcion");
-                        double tiempo = Double.parseDouble(request.getParameter("tiempo"));
+                        String tiempoString = request.getParameter("tiempo");
                         double distancia = Double.parseDouble(request.getParameter("distancia"));
                         String dificultad = request.getParameter("dificultad");
                         String tipoRuta = request.getParameter("tiporuta");
 
                         Part filePart = request.getPart("foto");
                         String nombreFoto = subirImagen(filePart, "rutas"); // <--- CARPETA RUTAS
+
+                        //procesar el tiempo (porque viene como HH:MM)
+                        double tiempo = 0.0;
+                        String[] partes = tiempoString.split(":");
+                        int horas = Integer.parseInt(partes[0]);
+                        int minutos = Integer.parseInt(partes[1]);
+                        tiempo = horas + (minutos / 60.0); //para convertirlo a double
 
                         if (nombreFoto == null) {
                             nombreFoto = "sin_fondo.png"; // Ten una imagen por defecto para rutas
@@ -199,7 +206,7 @@ public class ControladorRutas extends HttpServlet {
 
                         Part filePart = request.getPart("foto");
                         String nombreFotoNueva = subirImagen(filePart, "rutas");
-                        
+
                         // 3. SOLO CAMBIAR FOTO SI HAY UNA NUEVA
                         if (nombreFotoNueva != null) {
                             rutaEditada.setNombreFoto(nombreFotoNueva);

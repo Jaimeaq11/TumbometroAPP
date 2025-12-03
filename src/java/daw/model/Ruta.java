@@ -20,8 +20,7 @@ import java.util.Date;
     //esta es para seleccionar las rutas cuyo dueño sea null
     @NamedQuery(name = "Ruta.findByUserNull", query = "SELECT r FROM Ruta r WHERE r.usuarioid IS NULL"),
     //esta es para seleccionar solo las rutas publicas
-    @NamedQuery(name = "Ruta.findPublicas", query = "SELECT r FROM Ruta r WHERE r.publica = true"),
-})
+    @NamedQuery(name = "Ruta.findPublicas", query = "SELECT r FROM Ruta r WHERE r.publica = true"),})
 
 @Entity
 public class Ruta implements Serializable {
@@ -43,13 +42,12 @@ public class Ruta implements Serializable {
 
     private int likes;
     private String listaDeIDs;
-    
+
     @Transient //esto significa que no lo meta en la bd, solo en java
     private boolean yaLeDiLike;
-    
-    //esto es para que el id usuario de una ruta pueda ser null
-    @ManyToOne(optional = true) // <-- 'true' permite que sea null
-    @JoinColumn(name = "usuarioid", nullable = true) // <-- Le dice a la BBDD que acepte NULL
+
+    @ManyToOne
+    @JoinColumn(name = "usuarioid")
     private Usuario usuarioid;
 
     //SIN EL CONSTRUCTOR VACIO NO LANZA LA APLICACION (no se por que)
@@ -68,7 +66,6 @@ public class Ruta implements Serializable {
         this.usuarioid = usuarioid;
     }
 
-    
     public Long getId() {
         return id;
     }
@@ -103,6 +100,19 @@ public class Ruta implements Serializable {
 
     public double getTiempo() {
         return tiempo;
+    }
+    
+    //para pasarselo a la vista de nuevo
+    public String getTiempoFormateado() {
+        int horas = (int) this.tiempo;
+        int minutos = (int) ((this.tiempo - horas) * 60 + 0.1);
+        return String.format("%02d:%02d", horas, minutos);
+        /*  
+            %   → Inicio del especificador de formato
+            0   → Rellenar con ceros (zero-pad)
+            2   → Ancho mínimo de 2 caracteres 
+            d   → Tipo: número decimal (entero)
+        */
     }
 
     public void setTiempo(double tiempo) {
@@ -140,7 +150,7 @@ public class Ruta implements Serializable {
     public void setNombreFoto(String nombreFoto) {
         this.nombreFoto = nombreFoto;
     }
-    
+
     public boolean isPublica() {
         return publica;
     }
@@ -172,7 +182,7 @@ public class Ruta implements Serializable {
     public void setYaLeDiLike(boolean yaLeDiLike) {
         this.yaLeDiLike = yaLeDiLike;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

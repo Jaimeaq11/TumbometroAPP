@@ -40,7 +40,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><b>Distancia: </b>${ruta.distancia} km</li>
-                        <li class="list-group-item"><b>Tiempo: </b>${ruta.tiempo} h</li>
+                        <li class="list-group-item"><b>Tiempo: </b>${ruta.tiempoFormateado} h</li>
                         <li class="list-group-item"><b>Tipo de ruta: </b>${ruta.tipoRuta}</li>
                         <li class="list-group-item"><b>Dificultad: </b>
                             <c:choose>
