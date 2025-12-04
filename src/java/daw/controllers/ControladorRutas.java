@@ -189,7 +189,7 @@ public class ControladorRutas extends HttpServlet {
                     try {
                         String nombre = request.getParameter("nombre");
                         String descripcion = request.getParameter("descripcion");
-                        double tiempo = Double.parseDouble(request.getParameter("tiempo"));
+                        String tiempoString = request.getParameter("tiempo");
                         double distancia = Double.parseDouble(request.getParameter("distancia"));
                         String dificultad = request.getParameter("dificultad");
                         String tipoRuta = request.getParameter("tiporuta");
@@ -197,6 +197,13 @@ public class ControladorRutas extends HttpServlet {
                         long idRuta = Long.parseLong(request.getParameter("idRuta"));
                         Ruta rutaEditada = em.find(Ruta.class, idRuta);
 
+                        double tiempo = 0.0;
+                        String[] partes = tiempoString.split(":");
+                        int horas = Integer.parseInt(partes[0]);
+                        int minutos = Integer.parseInt(partes[1]);
+                        tiempo = horas + (minutos / 60.0); //para convertirlo a double
+
+                        
                         rutaEditada.setNombre(nombre);
                         rutaEditada.setDescripcion(descripcion);
                         rutaEditada.setTiempo(tiempo);
