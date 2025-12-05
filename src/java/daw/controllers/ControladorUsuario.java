@@ -286,8 +286,9 @@ public class ControladorUsuario extends HttpServlet {
 
             case "/eliminar-usuario" -> {
 
+                //verificamos que el usuario normal no pueda borrar otros usuarios
                 Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-                if (usuarioLogueado != null) {
+                if (usuarioLogueado != null && usuarioLogueado.getRol().equals("admin")) {
 
                     String idParam = request.getParameter("idUsuario");
                     if (idParam != null) {
